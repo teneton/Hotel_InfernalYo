@@ -6,7 +6,7 @@ public class DogChase : MonoBehaviour
     public Transform player;
     private DogTimer timerScript;
     private NavMeshAgent agent;
-    public GameOverUI gameOverUI;
+    public GameOverUITMP gameOverUI;
     private Quaternion initialRotation;
 
     public float interactionDistance = 2f;
