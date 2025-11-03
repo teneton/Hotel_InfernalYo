@@ -831,7 +831,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 192430032}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 100}
   m_LocalScale: {x: 10, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4059,6 +4059,71 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 983909079839170388, guid: 872e0ddb16dfc2847bd5834c411036ba, type: 3}
   m_PrefabInstance: {fileID: 1624507929}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1393077886
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1892506368119926387, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1624507930}
+    - target: {fileID: 1892506368119926387, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: gameOverUI
+      value: 
+      objectReference: {fileID: 2071594912}
+    - target: {fileID: 4700553763237880522, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_Name
+      value: Bio Hound Game Ready
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 163.83232
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5930912
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -124.98071
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.012484128
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.012484129
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7069966
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7069966
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5363901585466013808, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 182.023
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
 --- !u!1 &1433843249
 GameObject:
   m_ObjectHideFlags: 0
@@ -6543,3 +6608,4 @@ SceneRoots:
   - {fileID: 2071594911}
   - {fileID: 996332623}
   - {fileID: 1465946749}
+  - {fileID: 1393077886}

@@ -68,12 +68,17 @@ public class DogChase : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && timerScript.isChasing)
         {
-            Debug.Log("¡El jugador ha sido alcanzado!");
+            Debug.Log("¡El jugador ha sido alcanzado por el perro!");
             gameOverUI.ShowGameOverMessage();
         }
+        else if (other.CompareTag("Player"))
+        {
+            Debug.Log("El jugador está cerca del perro, pero no está siendo perseguido.");
+        }
     }
+
 
     void OnGUI()
     {
