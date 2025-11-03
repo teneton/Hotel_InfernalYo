@@ -7,6 +7,8 @@ public class UnifiedInteractionUI : MonoBehaviour
 
     void OnGUI()
     {
+        if (Time.timeScale == 0f) return; 
+
         bool mostrarInteraccion = false;
 
         if (interactionScript != null && interactionScript.IsPlayerNear())

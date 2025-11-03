@@ -8,7 +8,18 @@ public class DogTimerUI : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f)
+        {
+            if (timerText.enabled) timerText.enabled = false;
+            return;
+        }
+
+        if (!timerText.enabled) timerText.enabled = true;
+
         float timeLeft = timerScript.GetTimeRemaining();
         timerText.text = $"Tiempo restante: {timeLeft:F1}s";
     }
+
+
+
 }
