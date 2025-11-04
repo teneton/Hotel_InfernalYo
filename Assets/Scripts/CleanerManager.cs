@@ -117,23 +117,40 @@ public class CleanerManager : MonoBehaviour
     }
 
     void OnGUI()
+{
+    GUIStyle estiloTexto = new GUIStyle(GUI.skin.label);
+    estiloTexto.fontSize = 20;
+    estiloTexto.normal.textColor = Color.white;
+    estiloTexto.alignment = TextAnchor.UpperCenter;
+
+    float anchoBarra = 300f;
+    float altoBarra = 25f;
+    float x = Screen.width / 2 - anchoBarra / 2;
+    float y = 60f;
+
+    // Fondo de la barra
+    GUI.color = Color.gray;
+    GUI.DrawTexture(new Rect(x, y, anchoBarra, altoBarra), Texture2D.whiteTexture);
+
+    // Barra de progreso
+    float porcentaje = limpiezaActiva ? temporizador / tiempoLimite : tiempoEspera / tiempoReinicio;
+    GUI.color = limpiezaActiva ? Color.green : Color.red;
+    GUI.DrawTexture(new Rect(x, y, anchoBarra * porcentaje, altoBarra), Texture2D.whiteTexture);
+
+    // Texto encima de la barra
+    string texto = limpiezaActiva
+        ? $"Tiempo restante: {temporizador:F1}s"
+        : $"Reinicio en: {tiempoEspera:F1}s";
+
+    GUI.color = Color.white;
+    GUI.Label(new Rect(x, y - 30, anchoBarra, 30), texto, estiloTexto);
+
+    // Mensaje de interacción
+    if (cerca && limpiezaActiva)
     {
-        GUIStyle estilo = new GUIStyle(GUI.skin.label);
-        estilo.fontSize = 20;
-        estilo.normal.textColor = Color.white;
-        estilo.alignment = TextAnchor.UpperCenter;
-
-        Rect rect = new Rect(Screen.width / 2 - 100, 20, 200, 30);
-        if (limpiezaActiva)
-            GUI.Label(rect, $"Tiempo restante: {temporizador:F1}s", estilo);
-        else
-            GUI.Label(rect, $"Reinicio en: {tiempoEspera:F1}s", estilo);
-
-        if (cerca && limpiezaActiva)
-        {
-            Rect mensaje = new Rect(Screen.width / 2 - 150, Screen.height - 100, 300, 50);
-            GUI.Label(mensaje, "Presiona E para limpiar cubo", estilo);
-        }
+        Rect mensaje = new Rect(Screen.width / 2 - 150, Screen.height - 100, 300, 50);
+        GUI.Label(mensaje, "Presiona E para limpiar cubo", estiloTexto);
     }
+}
 }
 
