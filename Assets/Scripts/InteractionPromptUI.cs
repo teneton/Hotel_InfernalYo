@@ -39,12 +39,13 @@ public class InteractionPromptUI : MonoBehaviour
         if (!mostrarMensaje || Time.timeScale == 0f) return;
 
         GUIStyle estilo = new GUIStyle(GUI.skin.label);
-        estilo.fontSize = 20;
+        estilo.fontSize = 44;
         estilo.normal.textColor = Color.white;
         estilo.alignment = TextAnchor.MiddleCenter;
 
-        Rect rect = new Rect(Screen.width / 2 - 150, Screen.height - 100, 300, 50);
+        Rect rect = new Rect(Screen.width / 2 - 350, Screen.height - 180, 700, 100);
         GUI.Label(rect, "Presiona E para interactuar", estilo);
     }
+
 }
 

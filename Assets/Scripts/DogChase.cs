@@ -82,10 +82,12 @@ public class DogChase : MonoBehaviour
 
     void OnGUI()
     {
+        if (Time.timeScale == 0f) return;
+
         if (isPlayerNearby && !timerScript.isChasing)
         {
             GUIStyle style = new GUIStyle(GUI.skin.label);
-            style.fontSize = 44;
+            style.fontSize = 36;
             style.normal.textColor = Color.white;
             style.alignment = TextAnchor.MiddleCenter;
 
@@ -96,13 +98,13 @@ public class DogChase : MonoBehaviour
         if (!timerScript.isChasing)
         {
             GUIStyle timerStyle = new GUIStyle(GUI.skin.label);
-            timerStyle.fontSize = 42;
+            timerStyle.fontSize = 40;
             timerStyle.normal.textColor = Color.red;
             timerStyle.alignment = TextAnchor.UpperRight;
 
             Rect timerRect = new Rect(Screen.width - 520, 40, 400, 50);
             GUI.Label(timerRect, "Tiempo perro: " + timerScript.GetTimeRemaining().ToString("F1") + "s", timerStyle);
         }
-
     }
+
 }
