@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class DemonBehaviour : MonoBehaviour
 {
     public Transform jugador;
-    public GameObject interfazGameOver;
+    public GameOverUITMP interfazGameOver;
 
     public float velocidadNormal = 5.5f;
     public float velocidadMatar = 8f;
@@ -125,7 +125,7 @@ public class DemonBehaviour : MonoBehaviour
 
             if (interfazGameOver != null)
             {
-                interfazGameOver.SetActive(true);
+                interfazGameOver.ShowGameOverMessage();
                 Time.timeScale = 0f;
                 Debug.Log(" El demonio ha atrapado al jugador.");
             }

@@ -7,15 +7,17 @@ public class ToallaPickup : MonoBehaviour
     public GameObject toallaVisualPrefab;
     public Transform puntoColocacion;
 
+    public Camera camaraJugador;
+    public float radioInteraccion = 0.5f;
+    public float distanciaInteraccion = 3.5f;
+
     private bool recogida = false;
     private bool entregada = false;
-    private bool jugadorCerca = false;
-    private bool cercaEntrega = false;
 
     void Update()
     {
-        // Recoger la toalla
-        if (jugadorCerca && !recogida && Input.GetKeyDown(KeyCode.E))
+        // Detectar si el jugador está mirando a la toalla
+        if (!recogida && DetectarToalla() && Input.GetKeyDown(KeyCode.E))
         {
             recogida = true;
             playerMovement.LlevarObjeto(true);
@@ -32,15 +34,11 @@ public class ToallaPickup : MonoBehaviour
         // Detectar si estamos cerca de la zona de entrega
         if (recogida && !entregada)
         {
-            cercaEntrega = false;
-
             Collider[] hits = Physics.OverlapSphere(playerMovement.transform.position, 2f);
             foreach (Collider hit in hits)
             {
                 if (hit.CompareTag("EntregaToalla"))
                 {
-                    cercaEntrega = true;
-
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         entregada = true;
@@ -49,7 +47,6 @@ public class ToallaPickup : MonoBehaviour
 
                         if (toallaVisualPrefab != null && puntoColocacion != null)
                         {
-                            // Ajuste opcional de altura si el pivot del prefab está centrado
                             Vector3 offset = new Vector3(0, 0.5f, 0);
                             Instantiate(toallaVisualPrefab, puntoColocacion.position + offset, puntoColocacion.rotation);
                         }
@@ -61,20 +58,22 @@ public class ToallaPickup : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    bool DetectarToalla()
     {
-        if (other.CompareTag("Player"))
-            jugadorCerca = true;
-    }
+        Ray ray = new Ray(camaraJugador.transform.position, camaraJugador.transform.forward);
+        RaycastHit hit;
 
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-            jugadorCerca = false;
+        if (Physics.SphereCast(ray, radioInteraccion, out hit, distanciaInteraccion))
+        {
+            return hit.collider != null && hit.collider.gameObject == gameObject;
+        }
+
+        return false;
     }
 
     public bool ToallaEntregada => entregada;
 }
+
 
 
 
