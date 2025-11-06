@@ -17,7 +17,9 @@ public class InteractionDemon : MonoBehaviour
     void Start()
     {
         tiempoActual = 0f;
-        cuboRenderer.material.color = Color.white;
+
+        if (cuboRenderer != null)
+            cuboRenderer.material.color = Color.white;
 
         if (camaraJugador == null)
             Debug.LogError("Asigna la cámara del jugador en el inspector.");
@@ -25,10 +27,10 @@ public class InteractionDemon : MonoBehaviour
 
     void Update()
     {
-        RaycastHit hit;
         jugadorCerca = false;
 
-        if (Physics.Raycast(camaraJugador.transform.position, camaraJugador.transform.forward, out hit, distanciaInteraccion))
+        RaycastHit hit;
+        if (camaraJugador != null && Physics.Raycast(camaraJugador.transform.position, camaraJugador.transform.forward, out hit, distanciaInteraccion))
         {
             if (hit.collider.gameObject == gameObject)
             {
@@ -36,9 +38,10 @@ public class InteractionDemon : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    cuboRenderer.material.color = Color.green;
+                    if (cuboRenderer != null)
+                        cuboRenderer.material.color = Color.green;
 
-                    if (!faseFinal)
+                    if (!faseFinal && demonio != null)
                     {
                         cronometroDetenido = true;
                         demonio.Calmar();
@@ -52,33 +55,28 @@ public class InteractionDemon : MonoBehaviour
             }
         }
 
-        // Temporizador demonio
         if (!cronometroDetenido && !faseFinal)
         {
             tiempoActual += Time.deltaTime;
 
-            if (tiempoActual >= tiempoLimite)
+            if (tiempoActual >= tiempoLimite && demonio != null)
             {
-                demonio.Enfadar();
+                demonio.ActivarPersecucionSuave();
             }
 
-            if (tiempoActual >= tiempoFinal)
+            if (tiempoActual >= tiempoFinal && demonio != null)
             {
                 faseFinal = true;
-                demonio.Teletransportarse();
+                demonio.ActivarModoMatar();
             }
         }
     }
 
-    public bool EstaEnFaseFinal()
-    {
-        return faseFinal;
-    }
-
+    public bool EstaEnFaseFinal() => faseFinal;
     public bool IsPlayerNear() => jugadorCerca;
     public float GetRemainingTime() => Mathf.Max(0f, tiempoFinal - tiempoActual);
-
 }
+
 
 
 

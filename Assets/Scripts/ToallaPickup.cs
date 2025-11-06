@@ -73,25 +73,7 @@ public class ToallaPickup : MonoBehaviour
             jugadorCerca = false;
     }
 
-    void OnGUI()
-    {
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.fontSize = 20;
-        style.normal.textColor = Color.white;
-        style.alignment = TextAnchor.MiddleCenter;
-
-        if (jugadorCerca && !recogida)
-        {
-            Rect rect = new Rect(Screen.width / 2 - 150, Screen.height - 100, 300, 50);
-            GUI.Label(rect, "Presiona E para recoger la toalla", style);
-        }
-
-        if (recogida && cercaEntrega && !entregada)
-        {
-            Rect rect = new Rect(Screen.width / 2 - 150, Screen.height - 100, 300, 50);
-            GUI.Label(rect, "Presiona E para entregar la toalla", style);
-        }
-    }
+    public bool ToallaEntregada => entregada;
 }
 
 
