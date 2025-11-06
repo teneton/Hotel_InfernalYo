@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &190674074181773453
+--- !u!1 &7801334199671601595
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4611831870880105315}
-  - component: {fileID: 4820718614718698904}
+  - component: {fileID: 7837866016082797975}
+  - component: {fileID: 1641766776391670956}
   m_Layer: 0
-  m_Name: ControladorLimpieza
+  m_Name: UIManger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4611831870880105315
+--- !u!4 &7837866016082797975
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 190674074181773453}
+  m_GameObject: {fileID: 7801334199671601595}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12133, y: 0, z: -2.95405}
+  m_LocalPosition: {x: 194.57207, y: 2.15, z: -120.43914}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4820718614718698904
+--- !u!114 &1641766776391670956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 190674074181773453}
+  m_GameObject: {fileID: 7801334199671601595}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23273a90c500ddf40afda4259be7314e, type: 3}
+  m_Script: {fileID: 11500000, guid: 10b739bbc195c6443abc3050d369fc94, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CleanerManager
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionPromptUI
   playerCamera: {fileID: 0}
-  cubosLimpiables:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  distanciaInteraccion: 2
   playerMovement: {fileID: 0}

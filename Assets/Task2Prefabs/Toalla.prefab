@@ -160,3 +160,6 @@ MonoBehaviour:
   toallaAnchor: {fileID: 0}
   toallaVisualPrefab: {fileID: 5671917673943610951}
   puntoColocacion: {fileID: 0}
+  camaraJugador: {fileID: 0}
+  radioInteraccion: 0.5
+  distanciaInteraccion: 3.5

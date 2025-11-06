@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9c57e495255586a489a632bc0ee42210, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 102.38711
+      value: 100.88773
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c57e495255586a489a632bc0ee42210, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c57e495255586a489a632bc0ee42210, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -131.045
+      value: -121.70839
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9c57e495255586a489a632bc0ee42210, type: 3}
       propertyPath: m_LocalRotation.w
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9c57e495255586a489a632bc0ee42210, type: 3}
       propertyPath: m_TagString
-      value: Inter
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -106,7 +106,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5.2
+  m_Speed: 5.8
   m_Acceleration: 6
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -131,6 +131,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DemonBehaviour
   jugador: {fileID: 0}
-  puntosPatrulla: []
   interfazGameOver: {fileID: 0}
-  scriptInteraccion: {fileID: 0}
+  puntosPatrulla:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  velocidadNormal: 5.5
+  velocidadMatar: 8
+  distanciaMinima: 6
