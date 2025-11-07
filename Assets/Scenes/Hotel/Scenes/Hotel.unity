@@ -13278,7 +13278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4464349456156088902, guid: cc17358c918f7e04da415d58d2af5eec, type: 3}
       propertyPath: tiempoTotal
-      value: 61
+      value: 210
       objectReference: {fileID: 0}
     - target: {fileID: 4464349456156088902, guid: cc17358c918f7e04da415d58d2af5eec, type: 3}
       propertyPath: toallaPickup
