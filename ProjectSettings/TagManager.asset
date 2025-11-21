@@ -13,6 +13,7 @@ TagManager:
   - Enemy2
   - EntregaToallaWrong
   - "Ba\xF1era"
+  - Contenedor
   layers:
   - Default
   - TransparentFX
