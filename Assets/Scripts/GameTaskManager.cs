@@ -1,102 +1,87 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Administra las tareas del juego, el temporizador general y el comportamiento del demonio
 public class GameTaskManager : MonoBehaviour
 {
-    public CleanerManager cleanerManager;   // Referencia al sistema de limpieza
-    public ToallaPickup toallaPickup;       // Referencia al objeto de la toalla
-    public DemonBehaviour demonBehaviour;   // Referencia al demonio
+    public BedTaskManager bedTaskManager;
+    public DemonBehaviour demonBehaviour;
+    public GameObject juegoFinalizadoCanvas;
 
-    public GameObject juegoFinalizadoCanvas; // Canvas que aparece cuando termina el juego
-
-    public float tiempoTotal = 210f;        // Tiempo total para completar las tareas
-    private float tiempoRestante;           // Tiempo que va decreciendo
-    private bool persecucionActivada = false; // Si la persecución suave del demonio comenzó
-    private bool modoMatarActivado = false;   // Si el demonio entró en modo matar
-    private bool juegoFinalizado = false;     // Si el juego terminó
+    public float tiempoTotal = 210f;
+    private float tiempoRestante;
+    private bool persecucionActivada = false;
+    private bool modoMatarActivado = false;
+    private bool tareasCompletadas = false;
 
     void Start()
     {
-        // Inicializar tiempo restante
         tiempoRestante = tiempoTotal;
 
-        // Asegurarse de que el canvas de finalización esté oculto al inicio
         if (juegoFinalizadoCanvas != null)
             juegoFinalizadoCanvas.SetActive(false);
+
+        Debug.Log($"GameTaskManager iniciado - Latas totales: {TrashPickUp.TotalLatas}");
     }
 
     void Update()
     {
-        // Si el juego ya terminó, permitir reiniciar presionando U
-        if (juegoFinalizado)
+        if (!tareasCompletadas)
         {
-            if (Input.GetKeyDown(KeyCode.U))
+            tiempoRestante -= Time.deltaTime;
+        }
+
+        // Verificar estado de las tareas
+        bool latasOk = TrashPickUp.TodasLasLatasEntregadas();
+        bool camaOk = bedTaskManager != null && bedTaskManager.TareaCompletada;
+        bool nuevasTareasCompletas = latasOk && camaOk;
+
+        // DEBUG cada segundo
+        if (Time.frameCount % 60 == 0 && !tareasCompletadas)
+        {
+            Debug.Log($"DEBUG - Latas: {TrashPickUp.LatasEntregadas}/{TrashPickUp.TotalLatas} = {latasOk}, " +
+                     $"Cama: {camaOk}, Completas: {nuevasTareasCompletas}, " +
+                     $"Tiempo: {tiempoRestante:F1}s");
+        }
+
+        if (nuevasTareasCompletas && !tareasCompletadas)
+        {
+            tareasCompletadas = true;
+            Debug.Log("¡TAREAS COMPLETADAS! Calmando demonio...");
+            CalmarDemonio();
+        }
+
+        if (!tareasCompletadas)
+        {
+            if (tiempoRestante <= 60f && !persecucionActivada)
             {
-                Time.timeScale = 1f; // Reactivar tiempo
-                SceneManager.LoadScene("MainMenuControlador"); // Volver al menú
+                demonBehaviour.ActivarPersecucionSuave();
+                persecucionActivada = true;
+                Debug.Log("Demonio enfadado! Quedan menos de 60 segundos.");
             }
-            return;
-        }
 
-        // Reducir el tiempo restante
-        tiempoRestante -= Time.deltaTime;
-
-        // Verificar si se completaron las tareas
-        bool limpiezaOk = cleanerManager != null && cleanerManager.LimpiezaCompletada;
-        bool toallaOk = toallaPickup != null && toallaPickup.ToallaEntregada;
-        bool tareasCompletas = limpiezaOk && toallaOk;
-
-        // Si el jugador completó todas las tareas
-        if (tareasCompletas)
-        {
-            // Si la persecución ya estaba activa pero no en modo matar, calmar al demonio
-            if (persecucionActivada && !modoMatarActivado)
+            if (tiempoRestante <= 0f && !modoMatarActivado)
             {
-                demonBehaviour.Calmar();
-                Debug.Log("Tareas completadas: demonio calmado.");
+                demonBehaviour.ActivarModoMatar();
+                modoMatarActivado = true;
+                Debug.Log("MODO MATAR ACTIVADO! Demonio viene a por ti.");
             }
-
-            // Finalizar el juego
-            FinalizarJuego();
-        }
-
-        // Si queda menos de 60s y no se activó la persecución, activarla
-        if (tiempoRestante <= 60f && !persecucionActivada && !tareasCompletas)
-        {
-            demonBehaviour.ActivarPersecucionSuave();
-            persecucionActivada = true;
-        }
-
-        // Si el tiempo llega a cero y no está en modo matar, activarlo
-        if (tiempoRestante <= 0f && !modoMatarActivado && !tareasCompletas)
-        {
-            demonBehaviour.ActivarModoMatar();
-            modoMatarActivado = true;
         }
     }
 
-    // Maneja la finalización del juego
-    void FinalizarJuego()
+    void CalmarDemonio()
     {
-        juegoFinalizado = true;
-        Time.timeScale = 0f; // Pausar el juego
+        Debug.Log("Calmando demonio...");
 
-        if (juegoFinalizadoCanvas != null)
+        if (demonBehaviour != null)
         {
-            juegoFinalizadoCanvas.SetActive(true);
-            Debug.Log("Felicidades, has sobrevivido la primera noche.");
-        }
-        else
-        {
-            Debug.LogWarning("Canvas 'juegoFinalizado' no asignado.");
+            demonBehaviour.Calmar();
+            Debug.Log("Demonio calmado permanentemente.");
         }
     }
 
-    // Dibujar la barra de tiempo y texto en pantalla
     void OnGUI()
     {
-        if (Time.timeScale == 0f || juegoFinalizado) return;
+        if (Time.timeScale == 0f) return;
 
         GUIStyle estiloTexto = new GUIStyle(GUI.skin.label);
         estiloTexto.fontSize = 34;
@@ -108,19 +93,27 @@ public class GameTaskManager : MonoBehaviour
         float x = 35f;
         float y = 55f;
 
-        // Dibujar fondo gris de la barra
         GUI.color = Color.gray;
         GUI.DrawTexture(new Rect(x, y, anchoBarra, altoBarra), Texture2D.whiteTexture);
 
-        // Dibujar la porción de tiempo restante en color cyan
         float porcentaje = tiempoRestante / tiempoTotal;
-        GUI.color = Color.cyan;
+        GUI.color = tareasCompletadas ? Color.green : Color.cyan;
         GUI.DrawTexture(new Rect(x, y, anchoBarra * porcentaje, altoBarra), Texture2D.whiteTexture);
 
-        // Mostrar texto del tiempo restante
-        string texto = $"Tiempo restante: {tiempoRestante:F1}s";
-        GUI.color = Color.white;
+        string texto = tareasCompletadas ? "TAREAS COMPLETADAS - DEMONIO CALMADO" : $"Tiempo: {tiempoRestante:F1}s";
+        GUI.color = tareasCompletadas ? Color.green : Color.white;
         GUI.Label(new Rect(x, y - 45, anchoBarra, 45), texto, estiloTexto);
-    }
 
+        string textoLatas = $"Latas: {TrashPickUp.LatasEntregadas}/{TrashPickUp.TotalLatas}";
+        GUI.Label(new Rect(x, y + 60, anchoBarra, 45), textoLatas, estiloTexto);
+
+        if (bedTaskManager != null)
+        {
+            string textoCama = $"Cama: {(bedTaskManager.TareaCompletada ? "COMPLETADA" : "PENDIENTE")}";
+            GUI.Label(new Rect(x, y + 110, anchoBarra, 45), textoCama, estiloTexto);
+        }
+
+        string estadoDemonio = tareasCompletadas ? "DEMONIO: CALMADO" : (modoMatarActivado ? "DEMONIO: MODO MATAR" : (persecucionActivada ? "DEMONIO: ENFADADO" : "DEMONIO: TRANQUILO"));
+        GUI.Label(new Rect(x, y + 160, anchoBarra, 45), estadoDemonio, estiloTexto);
+    }
 }

@@ -10573,7 +10573,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 604364234252512121, guid: 872e0ddb16dfc2847bd5834c411036ba, type: 3}
       propertyPath: speed
-      value: 25
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 604364234252512121, guid: 872e0ddb16dfc2847bd5834c411036ba, type: 3}
       propertyPath: gravity
@@ -17801,6 +17801,10 @@ PrefabInstance:
       propertyPath: toallaPickup
       value: 
       objectReference: {fileID: 1445612193}
+    - target: {fileID: 4464349456156088902, guid: cc17358c918f7e04da415d58d2af5eec, type: 3}
+      propertyPath: bedTaskManager
+      value: 
+      objectReference: {fileID: 265475426}
     - target: {fileID: 4464349456156088902, guid: cc17358c918f7e04da415d58d2af5eec, type: 3}
       propertyPath: cleanerManager
       value: 

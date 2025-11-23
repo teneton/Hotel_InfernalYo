@@ -4,17 +4,16 @@ public class BedTaskManager : MonoBehaviour
 {
     public Camera playerCamera;
     public BedObjectBehavior[] objetosCama;
-
     private BedObjectBehavior objetoActual;
     private bool cerca = false;
     private bool tareaCompletada = false;
-
-    private float tiempoMantener = 3f; // Tiempo necesario para interactuar
+    private float tiempoMantener = 3f;
     private float contadorMantener = 0f;
     private bool manteniendo = false;
+    public PlayerMovement playerMovement;
 
-    public PlayerMovement playerMovement;     // Referencia al jugador
-
+    // Propiedad pública para que GameTaskManager pueda acceder
+    public bool TareaCompletada => tareaCompletada;
 
     void Update()
     {
@@ -23,8 +22,8 @@ public class BedTaskManager : MonoBehaviour
         if (playerMovement != null && playerMovement.EstaLlevandoObjeto)
         {
             cerca = false;
-            objetoActual = null; // o grifoActual, cuadroActual, etc.
-            return; // Bloquea la interacción si lleva objeto
+            objetoActual = null;
+            return;
         }
 
         RaycastHit hit;
@@ -54,13 +53,11 @@ public class BedTaskManager : MonoBehaviour
             {
                 manteniendo = true;
                 contadorMantener += Time.deltaTime;
-
                 if (contadorMantener >= tiempoMantener)
                 {
                     objetoActual.Interactuar();
                     contadorMantener = 0f;
                     manteniendo = false;
-
                     if (TodosCompletados())
                     {
                         tareaCompletada = true;
@@ -80,7 +77,8 @@ public class BedTaskManager : MonoBehaviour
     {
         foreach (BedObjectBehavior obj in objetosCama)
         {
-            if (!obj.EstaCompletado) return false;
+            if (!obj.EstaCompletado)
+                return false;
         }
         return true;
     }
@@ -90,11 +88,10 @@ public class BedTaskManager : MonoBehaviour
         if (cerca && objetoActual != null && !objetoActual.EstaCompletado)
         {
             GUIStyle estilo = new GUIStyle(GUI.skin.label);
-            estilo.fontSize = 40; // ← tamaño más grande
+            estilo.fontSize = 40;
             estilo.normal.textColor = Color.white;
             estilo.alignment = TextAnchor.MiddleCenter;
 
-            // Rect más ancho y alto para acomodar el texto grande
             Rect mensaje = new Rect(Screen.width / 2 - 200, Screen.height - 120, 400, 80);
 
             if (manteniendo)
