@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2409480413145187968
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -45.69854
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.97
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.1406736
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3840877921302943644, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7a8823d4afc85e646a388ccb834fba78, type: 2}
+    - target: {fileID: -3440028221999558522, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 705859ed25e614243b91cbe0c979a7ad, type: 2}
+    - target: {fileID: 919132149155446097, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_Name
+      value: THERMOMETER
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_TagString
+      value: Termometro
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701135054557071765, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.54
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: -1807970279642858887, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+    - {fileID: 65702495048144492, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 150616613025923946}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1006143072783696391}
+  m_SourcePrefab: {fileID: 100100000, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+--- !u!1 &3292510086056573905 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4faa8a43830a6264eb57edefe5bd006e, type: 3}
+  m_PrefabInstance: {fileID: 2409480413145187968}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &150616613025923946
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3292510086056573905}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.4, y: 4, z: 1.5}
+  m_Center: {x: -0.4, y: 2.6, z: 0.9}
+--- !u!114 &1006143072783696391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3292510086056573905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a855f8d768acc6c4e819e6ac10ff2944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TermometroInteract
+  canvasTermometro: {fileID: 0}
+  sliderTemperatura: {fileID: 0}
+  textoTemperatura: {fileID: 0}
+  botonConfirmar: {fileID: 0}
+  minCorrecto: 23
+  maxCorrecto: 25
+  demonio2: {fileID: 0}
+  playerMovement: {fileID: 0}

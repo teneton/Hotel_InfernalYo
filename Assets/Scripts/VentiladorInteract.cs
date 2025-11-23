@@ -5,47 +5,43 @@ using TMPro;
 public class VentiladorInteract : MonoBehaviour
 {
     [Header("Referencias UI")]
-    public GameObject canvasVentilador;   // Canvas del ventilador
-    public Slider sliderTiempo;           // Slider para ajustar el tiempo
-    public TMP_Text textoTiempo;          // Texto que muestra el tiempo actual
-    public TMP_Dropdown dropdownPotencia; // Dropdown para seleccionar la potencia
-    public Button botonConfirmar;         // Botón para confirmar
+    public GameObject canvasVentilador;
+    public Slider sliderTiempo;
+    public TMP_Text textoTiempo;
+    public TMP_Dropdown dropdownPotencia;
+    public Button botonConfirmar;
 
     [Header("Referencias externas")]
-    public DemonBehaviour2 demonio2;      // Referencia al demonio
-    public PlayerMovement playerMovement; // Referencia al jugador
+    public DemonBehaviour2 demonio2;
+    public PlayerMovement playerMovement;
 
     [Header("Valores correctos")]
     public int potenciaCorrecta = 3;
     public int tiempoCorrecto = 90;
 
     private bool abierto = false;
+    private bool cerca = false;
 
     void Start()
     {
         canvasVentilador.SetActive(false);
-
-        // Configurar listeners
         sliderTiempo.onValueChanged.AddListener(ActualizarTiempo);
         dropdownPotencia.onValueChanged.AddListener(ActualizarPotencia);
         botonConfirmar.onClick.AddListener(ValidarVentilador);
-
-        // Inicializar texto
         ActualizarTiempo(sliderTiempo.value);
         ActualizarPotencia(dropdownPotencia.value);
     }
 
     void Update()
     {
-        // Solo interactúa si no lleva objeto
-        if (!abierto && !playerMovement.EstaLlevandoObjeto && DetectarVentilador() && Input.GetKeyDown(KeyCode.E))
+        cerca = DetectarVentilador();
+
+        if (!abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             abierto = true;
             canvasVentilador.SetActive(true);
-
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
             Debug.Log("Canvas del ventilador abierto");
         }
     }
@@ -54,10 +50,8 @@ public class VentiladorInteract : MonoBehaviour
     {
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
-
         if (Physics.SphereCast(ray, 0.5f, out hit, 3.5f))
             return hit.collider != null && hit.collider.gameObject == gameObject;
-
         return false;
     }
 
@@ -68,7 +62,7 @@ public class VentiladorInteract : MonoBehaviour
 
     void ActualizarPotencia(int indice)
     {
-        textoTiempo.text = textoTiempo.text; // mantener el texto del tiempo
+        textoTiempo.text = textoTiempo.text;
         Debug.Log("Potencia seleccionada: " + dropdownPotencia.options[indice].text);
     }
 
@@ -86,19 +80,29 @@ public class VentiladorInteract : MonoBehaviour
         {
             Debug.Log("Ventilador configurado incorrectamente, demonio enfadado!");
             CerrarCanvas();
-
             if (demonio2 != null)
                 demonio2.ActivarPersecucionRapida();
         }
     }
 
-
     void CerrarCanvas()
     {
         canvasVentilador.SetActive(false);
         abierto = false;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    void OnGUI()
+    {
+        if (cerca && !abierto)
+        {
+            GUIStyle estilo = new GUIStyle(GUI.skin.label);
+            estilo.fontSize = 40;
+            estilo.normal.textColor = Color.white;
+            estilo.alignment = TextAnchor.MiddleCenter;
+            Rect mensaje = new Rect(Screen.width / 2 - 200, Screen.height - 120, 400, 80);
+            GUI.Label(mensaje, "Pulsa E para interactuar", estilo);
+        }
     }
 }

@@ -5,21 +5,20 @@ using TMPro;
 public class TermometroInteract : MonoBehaviour
 {
     [Header("Referencias UI")]
-    public GameObject canvasTermometro;   // Canvas del termómetro
-    public Slider sliderTemperatura;      // Slider para ajustar la temperatura
-    public TMP_Text textoTemperatura;     // Texto que muestra el valor actual
-    public Button botonConfirmar;         // Botón para confirmar
+    public GameObject canvasTermometro;
+    public Slider sliderTemperatura;
+    public TMP_Text textoTemperatura;
+    public Button botonConfirmar;
 
     [Header("Rango correcto")]
     public float minCorrecto = 23f;
     public float maxCorrecto = 25f;
 
     private bool abierto = false;
+    private bool cerca = false;
 
-    public DemonBehaviour2 demonio2;       // Referencia al demonio
-    public PlayerMovement playerMovement;  // Referencia al movimiento del jugador (para saber si lleva algo)
-
-
+    public DemonBehaviour2 demonio2;
+    public PlayerMovement playerMovement;
 
     void Start()
     {
@@ -30,51 +29,39 @@ public class TermometroInteract : MonoBehaviour
 
     void Update()
     {
-        // Abrir el termómetro con E si miras al objeto
-        // Nueva condición: solo si NO lleva objeto
-        if (!abierto && !playerMovement.EstaLlevandoObjeto && DetectarTermometro() && Input.GetKeyDown(KeyCode.E))
+        cerca = DetectarTermometro();
+
+        if (!abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             abierto = true;
             canvasTermometro.SetActive(true);
-
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-
-            Debug.Log("Canvas del termómetro abierto");
+            Debug.Log("Canvas del termÃ³metro abierto");
         }
     }
-
 
     bool DetectarTermometro()
     {
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
-
-        // SphereCast para detectar objetos cerca del centro de la pantalla
         if (Physics.SphereCast(ray, 0.5f, out hit, 3.5f))
-        {
-            // Solo devuelve true si el objeto golpeado es este termómetro
             return hit.collider != null && hit.collider.gameObject == gameObject;
-        }
-
         return false;
     }
 
-
     void ActualizarTexto(float valor)
     {
-        textoTemperatura.text = valor.ToString("F1") + " °C";
+        textoTemperatura.text = valor.ToString("F1") + " Â°C";
     }
 
     public void ValidarTemperatura()
     {
         float valor = sliderTemperatura.value;
-
         if (valor >= minCorrecto && valor <= maxCorrecto)
         {
             Debug.Log("Temperatura correcta: " + valor);
             CerrarCanvas();
-            // Aquí puedes marcar la tarea como completada
         }
         else
         {
@@ -82,7 +69,6 @@ public class TermometroInteract : MonoBehaviour
             CerrarCanvas();
             if (demonio2 != null)
                 demonio2.ActivarPersecucionRapida();
-            // Aquí puedes disparar consecuencia (ej. demonio enfadado)
         }
     }
 
@@ -90,8 +76,20 @@ public class TermometroInteract : MonoBehaviour
     {
         canvasTermometro.SetActive(false);
         abierto = false;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    void OnGUI()
+    {
+        if (cerca && !abierto)
+        {
+            GUIStyle estilo = new GUIStyle(GUI.skin.label);
+            estilo.fontSize = 40;
+            estilo.normal.textColor = Color.white;
+            estilo.alignment = TextAnchor.MiddleCenter;
+            Rect mensaje = new Rect(Screen.width / 2 - 200, Screen.height - 120, 400, 80);
+            GUI.Label(mensaje, "Pulsa E para interactuar", estilo);
+        }
     }
 }
