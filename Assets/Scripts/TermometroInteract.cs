@@ -16,9 +16,13 @@ public class TermometroInteract : MonoBehaviour
 
     private bool abierto = false;
     private bool cerca = false;
+    private bool tareaCompletada = false; // NUEVO: Para marcar como completada
 
     public DemonBehaviour2 demonio2;
     public PlayerMovement playerMovement;
+
+    // NUEVA propiedad pública
+    public bool TareaCompletada => tareaCompletada;
 
     void Start()
     {
@@ -31,7 +35,8 @@ public class TermometroInteract : MonoBehaviour
     {
         cerca = DetectarTermometro();
 
-        if (!abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
+        // SOLO se puede interactuar si no está completada
+        if (!tareaCompletada && !abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             abierto = true;
             canvasTermometro.SetActive(true);
@@ -58,18 +63,22 @@ public class TermometroInteract : MonoBehaviour
     public void ValidarTemperatura()
     {
         float valor = sliderTemperatura.value;
+
+        // MARCAR COMO COMPLETADA INDEPENDIENTEMENTE DEL RESULTADO
+        tareaCompletada = true;
+
         if (valor >= minCorrecto && valor <= maxCorrecto)
         {
             Debug.Log("Temperatura correcta: " + valor);
-            CerrarCanvas();
         }
         else
         {
             Debug.Log("Temperatura incorrecta: " + valor);
-            CerrarCanvas();
             if (demonio2 != null)
                 demonio2.ActivarPersecucionRapida();
         }
+
+        CerrarCanvas();
     }
 
     void CerrarCanvas()
@@ -82,7 +91,8 @@ public class TermometroInteract : MonoBehaviour
 
     void OnGUI()
     {
-        if (cerca && !abierto)
+        // SOLO mostrar mensaje si no está completada
+        if (cerca && !abierto && !tareaCompletada)
         {
             GUIStyle estilo = new GUIStyle(GUI.skin.label);
             estilo.fontSize = 40;

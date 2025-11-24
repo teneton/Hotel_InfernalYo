@@ -8,12 +8,12 @@ public class GameTaskManager : MonoBehaviour
     public DemonBehaviour demonBehaviour;
 
     [Header("UI")]
-    public GameObject juegoFinalizadoCanvas;  // Victoria - completar todo en <8 mins
-    public GameOverUITMP interfazGameOver;    // Derrota - tiempo agotado o demonio mata
+    public GameObject juegoFinalizadoCanvas;
+    public GameOverUITMP interfazGameOver;
 
     [Header("Timers")]
-    public float tiempoDemonio = 210f;        // 3.5 minutos para cama+latas
-    public float tiempoGeneral = 480f;        // 8 minutos para todas las tareas
+    public float tiempoDemonio = 210f;
+    public float tiempoGeneral = 480f;
 
     private float tiempoRestanteDemonio;
     private float tiempoRestanteGeneral;
@@ -25,11 +25,9 @@ public class GameTaskManager : MonoBehaviour
 
     void Start()
     {
-        // Inicializar timers
         tiempoRestanteDemonio = tiempoDemonio;
         tiempoRestanteGeneral = tiempoGeneral;
 
-        // Ocultar UI al inicio
         if (juegoFinalizadoCanvas != null)
             juegoFinalizadoCanvas.SetActive(false);
     }
@@ -38,14 +36,13 @@ public class GameTaskManager : MonoBehaviour
     {
         if (juegoGanado || juegoPerdido) return;
 
-        // Actualizar timers
         if (!juegoGanado)
         {
             tiempoRestanteDemonio -= Time.deltaTime;
             tiempoRestanteGeneral -= Time.deltaTime;
         }
 
-        // VERIFICAR VICTORIA: Todas las tareas completadas antes de 8 mins
+        // VERIFICAR VICTORIA
         if (TodasLasTareasCompletadas() && !juegoGanado)
         {
             juegoGanado = true;
@@ -53,7 +50,7 @@ public class GameTaskManager : MonoBehaviour
             return;
         }
 
-        // VERIFICAR DERROTA: Tiempo general agotado
+        // VERIFICAR DERROTA POR TIEMPO
         if (tiempoRestanteGeneral <= 0f && !juegoPerdido)
         {
             juegoPerdido = true;
@@ -61,7 +58,7 @@ public class GameTaskManager : MonoBehaviour
             return;
         }
 
-        // LÓGICA DEL DEMONIO (solo si no está calmado y no ganamos)
+        // LÓGICA DEL DEMONIO
         if (!demonioCalmado && !juegoGanado)
         {
             VerificarTareasDemonio();
@@ -70,12 +67,10 @@ public class GameTaskManager : MonoBehaviour
 
     void VerificarTareasDemonio()
     {
-        // Verificar tareas del demonio (cama + latas)
         bool latasOk = TrashPickUp.TodasLasLatasEntregadas();
         bool camaOk = bedTaskManager != null && bedTaskManager.TareaCompletada;
         bool tareasDemonioCompletas = latasOk && camaOk;
 
-        // Si se completan las tareas del demonio, calmarlo
         if (tareasDemonioCompletas && !demonioCalmado)
         {
             demonioCalmado = true;
@@ -85,7 +80,6 @@ public class GameTaskManager : MonoBehaviour
             }
         }
 
-        // Si NO se completan a tiempo, activar demonio
         if (!tareasDemonioCompletas && !demonioCalmado)
         {
             if (tiempoRestanteDemonio <= 60f && !persecucionActivada)
@@ -106,76 +100,170 @@ public class GameTaskManager : MonoBehaviour
     {
         // 1. Latas (5)
         bool latasCompletas = TrashPickUp.TodasLasLatasEntregadas();
+        if (!latasCompletas) return false;
 
         // 2. Cama
         bool camaCompletada = bedTaskManager != null && bedTaskManager.TareaCompletada;
+        if (!camaCompletada) return false;
 
         // 3. Toalla
         bool toallaCompletada = false;
         ToallaPickup toalla = FindObjectOfType<ToallaPickup>();
         if (toalla != null) toallaCompletada = toalla.ToallaEntregada;
+        if (!toallaCompletada) return false;
 
         // 4. Patito
         bool patitoCompletado = false;
         PatitoPickup patito = FindObjectOfType<PatitoPickup>();
         if (patito != null) patitoCompletado = patito.PatitoEntregado;
+        if (!patitoCompletado) return false;
 
         // 5. Limpieza
         bool limpiezaCompletada = false;
         CleanerManager limpieza = FindObjectOfType<CleanerManager>();
         if (limpieza != null) limpiezaCompletada = limpieza.LimpiezaCompletada;
+        if (!limpiezaCompletada) return false;
 
         // 6. Váteres
         bool vateresCompletados = false;
         ToiletTaskManager vateres = FindObjectOfType<ToiletTaskManager>();
-        if (vateres != null)
-        {
-            // Necesitaríamos una propiedad pública en ToiletTaskManager
-            // vateresCompletados = vateres.TareaCompletada;
-            vateresCompletados = true; // Temporal - necesitas agregar la propiedad
-        }
+        if (vateres != null) vateresCompletados = vateres.TareaCompletada;
+        if (!vateresCompletados) return false;
 
         // 7. Grifos
         bool grifosCompletados = false;
         FaucetTaskManager grifos = FindObjectOfType<FaucetTaskManager>();
-        if (grifos != null)
-        {
-            // grifosCompletados = grifos.TareaCompletada;
-            grifosCompletados = true; // Temporal
-        }
+        if (grifos != null) grifosCompletados = grifos.TareaCompletada;
+        if (!grifosCompletados) return false;
 
         // 8. Cuadros
         bool cuadrosCompletados = false;
         FrameTaskManager cuadros = FindObjectOfType<FrameTaskManager>();
-        if (cuadros != null)
-        {
-            // cuadrosCompletados = cuadros.TareaCompletada;
-            cuadrosCompletados = true; // Temporal
-        }
+        if (cuadros != null) cuadrosCompletados = cuadros.TareaCompletada;
+        if (!cuadrosCompletados) return false;
 
         // 9. Lámparas
         bool lamparasCompletadas = false;
         LampTaskManager lamparas = FindObjectOfType<LampTaskManager>();
-        if (lamparas != null)
+        if (lamparas != null) lamparasCompletadas = lamparas.TareaCompletada;
+        if (!lamparasCompletadas) return false;
+
+        // 10. Teléfono
+        bool telefonoCompletado = false;
+        TelefonoInteract telefono = FindObjectOfType<TelefonoInteract>();
+        if (telefono != null) telefonoCompletado = telefono.TareaCompletada;
+        if (!telefonoCompletado) return false;
+
+        // 11. Termómetro
+        bool termometroCompletado = false;
+        TermometroInteract termometro = FindObjectOfType<TermometroInteract>();
+        if (termometro != null) termometroCompletado = termometro.TareaCompletada;
+        if (!termometroCompletado) return false;
+
+        // 12. Ventilador
+        bool ventiladorCompletado = false;
+        VentiladorInteract ventilador = FindObjectOfType<VentiladorInteract>();
+        if (ventilador != null) ventiladorCompletado = ventilador.TareaCompletada;
+        if (!ventiladorCompletado) return false;
+
+        return true;
+    }
+
+    // NUEVO MÉTODO: Contar tareas completadas
+    int ContarTareasCompletadas()
+    {
+        int contador = 0;
+
+        try
         {
-            // lamparasCompletadas = lamparas.TareaCompletada;
-            lamparasCompletadas = true; // Temporal
+            // 1. Latas (5) - cuenta como 1 tarea cuando todas están entregadas
+            if (TrashPickUp.TodasLasLatasEntregadas())
+            {
+                contador++;
+            }
+
+            // 2. Cama
+            if (bedTaskManager != null && bedTaskManager.TareaCompletada)
+            {
+                contador++;
+            }
+
+            // 3. Toalla
+            ToallaPickup toalla = FindObjectOfType<ToallaPickup>();
+            if (toalla != null && toalla.ToallaEntregada)
+            {
+                contador++;
+            }
+
+            // 4. Patito
+            PatitoPickup patito = FindObjectOfType<PatitoPickup>();
+            if (patito != null && patito.PatitoEntregado)
+            {
+                contador++;
+            }
+
+            // 5. Limpieza
+            CleanerManager limpieza = FindObjectOfType<CleanerManager>();
+            if (limpieza != null && limpieza.LimpiezaCompletada)
+            {
+                contador++;
+            }
+
+            // 6. Váteres
+            ToiletTaskManager vateres = FindObjectOfType<ToiletTaskManager>();
+            if (vateres != null && vateres.TareaCompletada)
+            {
+                contador++;
+            }
+
+            // 7. Grifos
+            FaucetTaskManager grifos = FindObjectOfType<FaucetTaskManager>();
+            if (grifos != null && grifos.TareaCompletada)
+            {
+                contador++;
+            }
+
+            // 8. Cuadros
+            FrameTaskManager cuadros = FindObjectOfType<FrameTaskManager>();
+            if (cuadros != null && cuadros.TareaCompletada)
+            {
+                contador++;
+            }
+
+            // 9. Lámparas
+            LampTaskManager lamparas = FindObjectOfType<LampTaskManager>();
+            if (lamparas != null && lamparas.TareaCompletada)
+            {
+                contador++;
+            }
+
+            // 10. Teléfono
+            TelefonoInteract telefono = FindObjectOfType<TelefonoInteract>();
+            if (telefono != null && telefono.TareaCompletada)
+            {
+                contador++;
+            }
+
+            // 11. Termómetro
+            TermometroInteract termometro = FindObjectOfType<TermometroInteract>();
+            if (termometro != null && termometro.TareaCompletada)
+            {
+                contador++;
+            }
+
+            // 12. Ventilador
+            VentiladorInteract ventilador = FindObjectOfType<VentiladorInteract>();
+            if (ventilador != null && ventilador.TareaCompletada)
+            {
+                contador++;
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Error contando tareas: " + e.Message);
         }
 
-        // 10. Teléfono (siempre correcto si no enfada al demonio)
-        bool telefonoCompletado = true;
-
-        // 11. Termómetro (siempre correcto si no enfada al demonio)
-        bool termometroCompletado = true;
-
-        // 12. Ventilador (siempre correcto si no enfada al demonio)
-        bool ventiladorCompletado = true;
-
-        // Devolver true solo si TODAS están completas
-        return latasCompletas && camaCompletada && toallaCompletada &&
-               patitoCompletado && limpiezaCompletada && vateresCompletados &&
-               grifosCompletados && cuadrosCompletados && lamparasCompletadas &&
-               telefonoCompletado && termometroCompletado && ventiladorCompletado;
+        return contador;
     }
 
     void MostrarVictoria()
@@ -185,6 +273,7 @@ public class GameTaskManager : MonoBehaviour
         {
             juegoFinalizadoCanvas.SetActive(true);
         }
+        Debug.Log("¡VICTORIA! Todas las tareas completadas.");
     }
 
     public void MostrarDerrota(string motivo)
@@ -195,9 +284,9 @@ public class GameTaskManager : MonoBehaviour
         {
             interfazGameOver.ShowGameOverMessage();
         }
+        Debug.Log("DERROTA: " + motivo);
     }
 
-    // Llamado por DemonBehaviour cuando mata al jugador
     public void JugadorMuertoPorDemonio()
     {
         if (!juegoGanado && !juegoPerdido)
@@ -219,6 +308,19 @@ public class GameTaskManager : MonoBehaviour
         float altoBarra = 45f;
         float x = 35f;
         float y = 55f;
+
+        // CONTADOR DE TAREAS - ARRIBA EN EL CENTRO
+        int tareasCompletadas = ContarTareasCompletadas();
+        int totalTareas = 12;
+
+        GUIStyle estiloContador = new GUIStyle(GUI.skin.label);
+        estiloContador.fontSize = 36;
+        estiloContador.normal.textColor = Color.yellow;
+        estiloContador.alignment = TextAnchor.UpperCenter;
+        estiloContador.fontStyle = FontStyle.Bold;
+
+        string textoContador = $"Tareas: {tareasCompletadas}/{totalTareas}";
+        GUI.Label(new Rect(Screen.width / 2 - 100, 20, 200, 50), textoContador, estiloContador);
 
         // BARRA TIEMPO GENERAL (8 minutos) - AZUL
         GUI.color = Color.gray;
@@ -278,6 +380,12 @@ public class GameTaskManager : MonoBehaviour
         if (juegoGanado)
         {
             GUI.Label(new Rect(x, y + 180, anchoBarra, 45), "TODAS LAS TAREAS COMPLETADAS", estiloTexto);
+        }
+
+        // DEBUG: Mostrar estado cada cierto tiempo
+        if (Time.frameCount % 300 == 0) // Cada ~5 segundos
+        {
+            Debug.Log($"Contador tareas: {tareasCompletadas}/12 - Tiempo general: {tiempoRestanteGeneral:F0}s - Tiempo demonio: {tiempoRestanteDemonio:F0}s");
         }
     }
 }

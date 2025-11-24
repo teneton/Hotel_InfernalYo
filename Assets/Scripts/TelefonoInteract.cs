@@ -17,6 +17,10 @@ public class TelefonoInteract : MonoBehaviour
 
     private bool abierto = false;
     private bool cerca = false;
+    private bool tareaCompletada = false; // NUEVO: Para marcar como completada
+
+    // NUEVA propiedad pública
+    public bool TareaCompletada => tareaCompletada;
 
     void Start()
     {
@@ -28,7 +32,8 @@ public class TelefonoInteract : MonoBehaviour
     {
         cerca = DetectarTelefono();
 
-        if (!abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
+        // SOLO se puede interactuar si no está completada
+        if (!tareaCompletada && !abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             abierto = true;
             canvasTelefono.SetActive(true);
@@ -51,18 +56,22 @@ public class TelefonoInteract : MonoBehaviour
     public void ValidarCodigo()
     {
         string codigoIngresado = inputCodigo.text;
+
+        // MARCAR COMO COMPLETADA INDEPENDIENTEMENTE DEL RESULTADO
+        tareaCompletada = true;
+
         if (codigoIngresado == "HAB-02")
         {
             Debug.Log("Código correcto, todo sigue igual");
-            CerrarCanvas();
         }
         else
         {
             Debug.Log("Código incorrecto, demonio enfadado!");
-            CerrarCanvas();
             if (demonio2 != null)
                 demonio2.ActivarPersecucionRapida();
         }
+
+        CerrarCanvas();
     }
 
     public void CerrarCanvas()
@@ -75,7 +84,8 @@ public class TelefonoInteract : MonoBehaviour
 
     void OnGUI()
     {
-        if (cerca && !abierto)
+        // SOLO mostrar mensaje si no está completada
+        if (cerca && !abierto && !tareaCompletada)
         {
             GUIStyle estilo = new GUIStyle(GUI.skin.label);
             estilo.fontSize = 40;
