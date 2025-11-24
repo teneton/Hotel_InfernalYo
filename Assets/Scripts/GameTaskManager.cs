@@ -322,7 +322,7 @@ public class GameTaskManager : MonoBehaviour
         float x = 35f;
         float y = 55f;
 
-        // CONTADOR DE TAREAS - Arriba en el centro (ACTUALIZADO EN TIEMPO REAL)
+        // CONTADOR DE TAREAS
         int tareasCompletadas = ContarTareasCompletadas();
         int totalTareas = 12;
 
@@ -335,7 +335,7 @@ public class GameTaskManager : MonoBehaviour
         string textoContador = $"Tareas: {tareasCompletadas}/{totalTareas}";
         GUI.Label(new Rect(Screen.width / 2 - 150, 20, 300, 50), textoContador, estiloContador);
 
-        // BARRA TIEMPO GENERAL (8 minutos) - Azul cian
+        // BARRA TIEMPO GENERAL (8 minutos)
         GUI.color = Color.gray;
         GUI.DrawTexture(new Rect(x, y, anchoBarra, altoBarra), Texture2D.whiteTexture);
 
@@ -347,27 +347,28 @@ public class GameTaskManager : MonoBehaviour
         GUI.color = juegoGanado ? Color.green : Color.white;
         GUI.Label(new Rect(x, y - 45, anchoBarra, 45), textoGeneral, estiloTexto);
 
-        // BARRA TIEMPO DEMONIO (3.5 minutos) - Naranja/Rojo
+        // BARRA TIEMPO DEMONIO (3.5 minutos)
         if (!demonioCalmado && !juegoGanado)
         {
-            float porcentajeDemonio = tiempoRestanteDemonio / tiempoDemonio;
+            float tiempoMostrar = Mathf.Max(0f, tiempoRestanteDemonio); // nunca negativo
+            float porcentajeDemonio = tiempoMostrar / tiempoDemonio;
 
             // Fondo de la barra
             GUI.color = Color.gray;
             GUI.DrawTexture(new Rect(x, y + 60, anchoBarra, 25), Texture2D.whiteTexture);
 
-            // Barra de progreso (cambia de color segun el estado)
-            if (modoMatarActivado)
+            // Color de la barra segun estado
+            if (tiempoMostrar <= 0f || modoMatarActivado)
             {
-                GUI.color = Color.red; // Rojo en modo matar
+                GUI.color = Color.red; // rojo fijo en modo matar o tiempo agotado
             }
             else if (persecucionActivada)
             {
-                GUI.color = new Color(1f, 0.5f, 0f); // Naranja intenso
+                GUI.color = new Color(1f, 0.5f, 0f); // naranja intenso
             }
             else
             {
-                GUI.color = new Color(1f, 0.7f, 0.2f); // Naranja suave
+                GUI.color = new Color(1f, 0.7f, 0.2f); // naranja suave
             }
 
             GUI.DrawTexture(new Rect(x, y + 60, anchoBarra * porcentajeDemonio, 25), Texture2D.whiteTexture);
@@ -379,7 +380,16 @@ public class GameTaskManager : MonoBehaviour
             estiloDemonio.alignment = TextAnchor.UpperLeft;
             estiloDemonio.fontStyle = FontStyle.Bold;
 
-            string textoDemonio = $"Demonio: {tiempoRestanteDemonio:F0}s / 210s";
+            string textoDemonio;
+            if (tiempoMostrar <= 0f)
+            {
+                textoDemonio = "PELIGRO: Demonio desatado!";
+            }
+            else
+            {
+                textoDemonio = $"Demonio: {tiempoMostrar:F0}s / 210s";
+            }
+
             GUI.Label(new Rect(x, y + 90, anchoBarra, 35), textoDemonio, estiloDemonio);
         }
 
@@ -395,4 +405,5 @@ public class GameTaskManager : MonoBehaviour
             GUI.Label(new Rect(x, y + 180, anchoBarra, 45), "TODAS LAS TAREAS COMPLETADAS", estiloTexto);
         }
     }
+
 }
