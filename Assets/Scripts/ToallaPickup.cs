@@ -2,20 +2,23 @@ using UnityEngine;
 
 public class ToallaPickup : MonoBehaviour
 {
-    public PlayerMovement playerMovement;     // Movimiento del jugador
-    public Transform toallaAnchor;            // Punto donde se sujeta la toalla
-    public GameObject toallaVisualPrefab;     // Prefab visual que aparece al entregar
-    public Transform puntoColocacion;         // Lugar exacto de colocación
-    public DemonBehaviour2 demonio2;          // Referencia al demonio
+    public PlayerMovement playerMovement;         // Movimiento del jugador
+    public Transform toallaAnchor;                // Punto donde se sujeta la toalla
+    public GameObject toallaVisualPrefab;         // Prefab visual que aparece al entregar
+    public Transform puntoColocacion;             // Lugar exacto de colocación
+    public DemonBehaviour2 demonio2;              // Referencia al segundo demonio
 
-    public Camera camaraJugador;              // Cámara del jugador
-    public float radioInteraccion = 0.5f;     // Radio del SphereCast
-    public float distanciaInteraccion = 3.5f; // Distancia máxima
+    public Camera camaraJugador;                  // Cámara del jugador
+    public float radioInteraccion = 0.5f;         // Radio del SphereCast
+    public float distanciaInteraccion = 3.5f;     // Distancia máxima de interacción
 
-    private bool recogida = false;            // Si la toalla ya fue recogida
-    private bool entregada = false;           // Si ya se entregó
-    private bool cerca = false;               // Si estamos mirando la toalla
-    private bool cercaEntrega = false;        // Si estamos cerca del punto de entrega
+    private bool recogida = false;                // Si la toalla ya fue recogida
+    private bool entregada = false;               // Si ya se entregó
+    private bool cerca = false;                   // Si estamos mirando la toalla
+    private bool cercaEntrega = false;            // Si estamos cerca del punto de entrega
+
+    // VARIABLE ESTÁTICA para rastrear si la toalla fue entregada
+    public static bool toallaEntregadaStatic = false;
 
     void Update()
     {
@@ -30,7 +33,7 @@ public class ToallaPickup : MonoBehaviour
             // La toalla SÍ reduce velocidad → reduceVelocidad = true
             playerMovement.LlevarObjeto(true, true);
 
-            // Colocar en mano
+            // Colocar en mano del jugador
             transform.SetParent(toallaAnchor);
             transform.localPosition = new Vector3(0, -0.4f, 0);
             transform.localRotation = Quaternion.identity;
@@ -51,31 +54,35 @@ public class ToallaPickup : MonoBehaviour
 
             foreach (Collider hit in hits)
             {
-                // Correcto
+                // Entregar en sitio correcto
                 if (hit.CompareTag("EntregaToalla") && Input.GetKeyDown(KeyCode.E))
                 {
                     entregada = true;
+                    toallaEntregadaStatic = true; // ACTUALIZAR VARIABLE ESTÁTICA
                     playerMovement.SoltarObjeto();
                     gameObject.SetActive(false);
 
+                    // Instanciar prefab visual en el punto de entrega
                     if (toallaVisualPrefab != null && puntoColocacion != null)
                     {
                         Vector3 offset = new Vector3(0, 0.5f, 0);
                         Instantiate(toallaVisualPrefab, puntoColocacion.position + offset, puntoColocacion.rotation);
                     }
 
-                    Debug.Log("Toalla entregada correctamente");
+                    Debug.Log("🛁 Toalla entregada correctamente - MARCADA COMO COMPLETADA");
                 }
 
-                // Incorrecto
+                // Entregar en sitio incorrecto
                 if (hit.CompareTag("EntregaToallaWrong") && Input.GetKeyDown(KeyCode.E))
                 {
                     entregada = true;
+                    toallaEntregadaStatic = true; // ACTUALIZAR VARIABLE ESTÁTICA
                     playerMovement.SoltarObjeto();
                     gameObject.SetActive(false);
 
-                    Debug.Log("Toalla entregada en el sitio equivocado, Demonio enfadado!");
+                    Debug.Log("🛁 Toalla entregada en el sitio equivocado - PERO MARCADA COMO COMPLETADA");
 
+                    // Activar persecución del segundo demonio
                     if (demonio2 != null)
                         demonio2.ActivarPersecucionRapida();
                 }
@@ -105,7 +112,20 @@ public class ToallaPickup : MonoBehaviour
         return false;
     }
 
+    // Propiedad para verificar si la toalla fue entregada (instancia)
     public bool ToallaEntregada => entregada;
+
+    // Método para verificar si la tarea está completada (instancia)
+    public bool TareaCompletada()
+    {
+        return entregada;
+    }
+
+    // MÉTODO ESTÁTICO para verificar si la toalla fue entregada
+    public static bool TareaCompletadaStatic()
+    {
+        return toallaEntregadaStatic;
+    }
 
     // GUI para mostrar mensajes en pantalla
     void OnGUI()

@@ -7060,15 +7060,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1819053834141852862, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
       propertyPath: m_LocalScale.x
-      value: 18
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1819053834141852862, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
       propertyPath: m_LocalScale.y
-      value: 18
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1819053834141852862, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
       propertyPath: m_LocalScale.z
-      value: 18
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1819053834141852862, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7110,6 +7110,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2057357828288037492, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
+      propertyPath: m_Speed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057357828288037492, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
+      propertyPath: m_Acceleration
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5966451996350806581, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
+      propertyPath: m_Size.x
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 6601319120080862210, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
       propertyPath: jugador
       value: 
@@ -7117,7 +7129,7 @@ PrefabInstance:
     - target: {fileID: 6601319120080862210, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
       propertyPath: telefono
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1160683099}
     - target: {fileID: 6601319120080862210, guid: 03ae7c60452575146bca768320ef50b7, type: 3}
       propertyPath: interfazGameOver
       value: 
@@ -11801,6 +11813,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1160683099 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5227414947091636472, guid: 50c2516b03403eb45b24104ea9b8d12b, type: 3}
+  m_PrefabInstance: {fileID: 451089795}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b80f176f96f6f46bd39dfaa6ed06ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TelefonoInteract
 --- !u!1001 &1175620526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15454,6 +15477,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bio Hound Game Ready
       objectReference: {fileID: 0}
+    - target: {fileID: 4700553763237880522, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5132575936992809652, guid: f3b9d6f157f12e547af46da3c74c0d38, type: 3}
       propertyPath: m_IsTrigger
       value: 1
@@ -18649,6 +18676,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1884281746}
     - target: {fileID: 4464349456156088902, guid: cc17358c918f7e04da415d58d2af5eec, type: 3}
+      propertyPath: interfazGameOver
+      value: 
+      objectReference: {fileID: 836499329}
+    - target: {fileID: 4464349456156088902, guid: cc17358c918f7e04da415d58d2af5eec, type: 3}
       propertyPath: juegoFinalizadoCanvas
       value: 
       objectReference: {fileID: 623248306}
@@ -20618,6 +20649,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: sk_monster_4
       objectReference: {fileID: 0}
+    - target: {fileID: 8283034260407169360, guid: 471ec89e5298b3c4f8725380cd6f559b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8771023516528405482, guid: 471ec89e5298b3c4f8725380cd6f559b, type: 3}
       propertyPath: m_LocalScale.x
       value: 20
@@ -20939,6 +20974,10 @@ PrefabInstance:
     - target: {fileID: 4871497745949491386, guid: 6e1ba69bfdc69eb46a5814b6d044b65d, type: 3}
       propertyPath: m_Name
       value: Whiteclown N Hallin
+      objectReference: {fileID: 0}
+    - target: {fileID: 4871497745949491386, guid: 6e1ba69bfdc69eb46a5814b6d044b65d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5185485502362798022, guid: 6e1ba69bfdc69eb46a5814b6d044b65d, type: 3}
       propertyPath: m_Speed

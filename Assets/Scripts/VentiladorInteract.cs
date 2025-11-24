@@ -5,29 +5,27 @@ using TMPro;
 public class VentiladorInteract : MonoBehaviour
 {
     [Header("Referencias UI")]
-    public GameObject canvasVentilador;
-    public Slider sliderTiempo;
-    public TMP_Text textoTiempo;
-    public TMP_Dropdown dropdownPotencia;
-    public Button botonConfirmar;
+    public GameObject canvasVentilador;           // Canvas del ventilador
+    public Slider sliderTiempo;                   // Slider para seleccionar tiempo
+    public TMP_Text textoTiempo;                  // Texto que muestra el tiempo
+    public TMP_Dropdown dropdownPotencia;         // Dropdown para seleccionar potencia
+    public Button botonConfirmar;                 // Botón de confirmación
 
     [Header("Referencias externas")]
-    public DemonBehaviour2 demonio2;
-    public PlayerMovement playerMovement;
+    public DemonBehaviour2 demonio2;              // Referencia al segundo demonio
+    public PlayerMovement playerMovement;         // Referencia al jugador
 
     [Header("Valores correctos")]
-    public int potenciaCorrecta = 3;
-    public int tiempoCorrecto = 90;
+    public int potenciaCorrecta = 3;              // Potencia correcta a seleccionar
+    public int tiempoCorrecto = 90;               // Tiempo correcto a seleccionar
 
-    private bool abierto = false;
-    private bool cerca = false;
-    private bool tareaCompletada = false; // NUEVO: Para marcar como completada
-
-    // NUEVA propiedad pública
-    public bool TareaCompletada => tareaCompletada;
+    private bool abierto = false;                 // Si el canvas está abierto
+    private bool cerca = false;                   // Si el jugador está cerca del ventilador
+    private bool tareaCompletada = false;         // Si la tarea está completada
 
     void Start()
     {
+        // Configurar UI al inicio
         canvasVentilador.SetActive(false);
         sliderTiempo.onValueChanged.AddListener(ActualizarTiempo);
         dropdownPotencia.onValueChanged.AddListener(ActualizarPotencia);
@@ -38,9 +36,10 @@ public class VentiladorInteract : MonoBehaviour
 
     void Update()
     {
+        // Detectar si el jugador está cerca del ventilador
         cerca = DetectarVentilador();
 
-        // SOLO se puede interactuar si no está completada
+        // Abrir canvas si no está completado, no está abierto y el jugador interactúa
         if (!tareaCompletada && !abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             abierto = true;
@@ -51,6 +50,7 @@ public class VentiladorInteract : MonoBehaviour
         }
     }
 
+    // Detectar si el jugador está mirando el ventilador
     bool DetectarVentilador()
     {
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -60,24 +60,28 @@ public class VentiladorInteract : MonoBehaviour
         return false;
     }
 
+    // Actualizar texto del tiempo cuando cambia el slider
     void ActualizarTiempo(float valor)
     {
         textoTiempo.text = valor.ToString("F0") + " min";
     }
 
+    // Actualizar cuando cambia la potencia (para debug)
     void ActualizarPotencia(int indice)
     {
         Debug.Log("Potencia seleccionada: " + dropdownPotencia.options[indice].text);
     }
 
+    // Validar la configuración del ventilador
     public void ValidarVentilador()
     {
         int tiempo = (int)sliderTiempo.value;
         int potencia = int.Parse(dropdownPotencia.options[dropdownPotencia.value].text);
 
-        // MARCAR COMO COMPLETADA INDEPENDIENTEMENTE DEL RESULTADO
+        // Marcar como completada independientemente del resultado
         tareaCompletada = true;
 
+        // Verificar si la configuración es correcta
         if (tiempo == tiempoCorrecto && potencia == potenciaCorrecta)
         {
             Debug.Log("Ventilador configurado correctamente");
@@ -92,6 +96,7 @@ public class VentiladorInteract : MonoBehaviour
         CerrarCanvas();
     }
 
+    // Cerrar el canvas del ventilador
     void CerrarCanvas()
     {
         canvasVentilador.SetActive(false);
@@ -100,9 +105,16 @@ public class VentiladorInteract : MonoBehaviour
         Cursor.visible = false;
     }
 
+    // Método para verificar si la tarea está completada
+    public bool TareaCompletada()
+    {
+        return tareaCompletada;
+    }
+
+    // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {
-        // SOLO mostrar mensaje si no está completada
+        // Solo mostrar mensaje si no está completada y no está abierto
         if (cerca && !abierto && !tareaCompletada)
         {
             GUIStyle estilo = new GUIStyle(GUI.skin.label);

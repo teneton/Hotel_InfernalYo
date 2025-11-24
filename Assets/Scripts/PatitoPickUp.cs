@@ -2,29 +2,41 @@ using UnityEngine;
 
 public class PatitoPickup : MonoBehaviour
 {
-    public PlayerMovement playerMovement;     // Movimiento del jugador
-    public Transform patitoAnchor;            // Punto donde se sujeta el patito
-    public GameObject patitoVisualPrefab;     // Prefab visual que aparece en la bañera
-    public Transform puntoColocacion;         // Lugar exacto de colocación
-    public Camera camaraJugador;              // Cámara del jugador
-    public float radioInteraccion = 0.5f;     // Radio del SphereCast
-    public float distanciaInteraccion = 3.5f; // Distancia máxima
+    public PlayerMovement playerMovement;         // Movimiento del jugador
+    public Transform patitoAnchor;                // Punto donde se sujeta el patito
+    public GameObject patitoVisualPrefab;         // Prefab visual que aparece en la bañera
+    public Transform puntoColocacion;             // Lugar exacto de colocación
+    public Camera camaraJugador;                  // Cámara del jugador
+    public float radioInteraccion = 0.5f;         // Radio del SphereCast
+    public float distanciaInteraccion = 3.5f;     // Distancia máxima de interacción
 
-    private bool recogido = false;            // Si el patito ya fue recogido
-    private bool entregado = false;           // Si ya se entregó
-    private bool cerca = false;               // Si estamos mirando el patito
-    private bool cercaBanera = false;         // Si estamos cerca de la bañera
+    private bool recogido = false;                // Si el patito ya fue recogido
+    private bool entregado = false;               // Si ya se entregó
+    private bool cerca = false;                   // Si estamos mirando el patito
+    private bool cercaBanera = false;             // Si estamos cerca de la bañera
+
+    // Variables estáticas para contar todos los patitos
+    public static int patitosEntregados = 0;
+    public static int totalPatitos = 0;
+
+    void Start()
+    {
+        // Contar este patito en el total
+        totalPatitos++;
+    }
 
     void Update()
     {
         // Detectar patito para recoger
         cerca = DetectarPatito();
 
+        // Recoger patito si no está recogido y el jugador no lleva objeto
         if (!recogido && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             recogido = true;
             playerMovement.LlevarObjeto(true, false);
 
+            // Colocar en mano del jugador
             transform.SetParent(patitoAnchor);
             transform.localPosition = new Vector3(0, -0.4f, 0);
             transform.localRotation = Quaternion.identity;
@@ -39,12 +51,15 @@ public class PatitoPickup : MonoBehaviour
         {
             cercaBanera = DetectarBanera();
 
+            // Entregar patito en la bañera
             if (cercaBanera && Input.GetKeyDown(KeyCode.E))
             {
                 entregado = true;
+                patitosEntregados++; // Contar patito entregado
                 playerMovement.SoltarObjeto();
                 gameObject.SetActive(false);
 
+                // Instanciar prefab visual en la bañera
                 if (patitoVisualPrefab != null && puntoColocacion != null)
                 {
                     Vector3 offset = new Vector3(0, 0.5f, 0);
@@ -56,7 +71,7 @@ public class PatitoPickup : MonoBehaviour
         }
     }
 
-    // Detectar patito
+    // Detectar si el jugador está mirando este patito
     bool DetectarPatito()
     {
         Ray ray = new Ray(camaraJugador.transform.position, camaraJugador.transform.forward);
@@ -66,20 +81,28 @@ public class PatitoPickup : MonoBehaviour
         return false;
     }
 
-    // Detectar bañera con tag
+    // Detectar si el jugador está cerca de la bañera
     bool DetectarBanera()
     {
         Collider[] hits = Physics.OverlapSphere(playerMovement.transform.position, 2f);
         foreach (Collider hit in hits)
         {
-            if (hit.CompareTag("Bañera") || hit.CompareTag("Bañera"))
+            if (hit.CompareTag("Bañera"))
                 return true;
         }
         return false;
     }
 
+    // Propiedad para verificar si este patito fue entregado
     public bool PatitoEntregado => entregado;
 
+    // Método estático para verificar si todos los patitos fueron entregados
+    public static bool TareaCompletada()
+    {
+        return patitosEntregados >= totalPatitos;
+    }
+
+    // Mostrar mensajes de interacción en pantalla
     void OnGUI()
     {
         GUIStyle estilo = new GUIStyle(GUI.skin.label);

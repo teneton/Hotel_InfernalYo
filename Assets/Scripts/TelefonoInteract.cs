@@ -4,35 +4,34 @@ using UnityEngine.UI;
 
 public class TelefonoInteract : MonoBehaviour
 {
-    public Camera camaraJugador;
-    public float radioInteraccion = 0.5f;
-    public float distanciaInteraccion = 3.5f;
+    public Camera camaraJugador;                  // Cámara del jugador
+    public float radioInteraccion = 0.5f;         // Radio del SphereCast
+    public float distanciaInteraccion = 3.5f;     // Distancia máxima de interacción
 
-    public GameObject canvasTelefono;
-    public TMP_InputField inputCodigo;
-    public Button botonConfirmar;
+    public GameObject canvasTelefono;             // Canvas del teléfono
+    public TMP_InputField inputCodigo;            // Campo de entrada para el código
+    public Button botonConfirmar;                 // Botón de confirmación
 
-    public DemonBehaviour2 demonio2;
-    public PlayerMovement playerMovement;
+    public DemonBehaviour2 demonio2;              // Referencia al segundo demonio
+    public PlayerMovement playerMovement;         // Referencia al jugador
 
-    private bool abierto = false;
-    private bool cerca = false;
-    private bool tareaCompletada = false; // NUEVO: Para marcar como completada
-
-    // NUEVA propiedad pública
-    public bool TareaCompletada => tareaCompletada;
+    private bool abierto = false;                 // Si el canvas está abierto
+    private bool cerca = false;                   // Si el jugador está cerca del teléfono
+    private bool tareaCompletada = false;         // Si la tarea está completada
 
     void Start()
     {
+        // Configurar UI al inicio
         canvasTelefono.SetActive(false);
         botonConfirmar.onClick.AddListener(ValidarCodigo);
     }
 
     void Update()
     {
+        // Detectar si el jugador está cerca del teléfono
         cerca = DetectarTelefono();
 
-        // SOLO se puede interactuar si no está completada
+        // Abrir canvas si no está completado, no está abierto y el jugador interactúa
         if (!tareaCompletada && !abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             abierto = true;
@@ -44,6 +43,7 @@ public class TelefonoInteract : MonoBehaviour
         }
     }
 
+    // Detectar si el jugador está mirando el teléfono
     bool DetectarTelefono()
     {
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -53,20 +53,22 @@ public class TelefonoInteract : MonoBehaviour
         return false;
     }
 
+    // Validar el código ingresado
     public void ValidarCodigo()
     {
         string codigoIngresado = inputCodigo.text;
 
-        // MARCAR COMO COMPLETADA INDEPENDIENTEMENTE DEL RESULTADO
+        // Marcar como completada independientemente del resultado
         tareaCompletada = true;
+        Debug.Log("📞 Teléfono - Tarea marcada como completada");
 
         if (codigoIngresado == "HAB-02")
         {
-            Debug.Log("Código correcto, todo sigue igual");
+            Debug.Log("📞 Teléfono - Código correcto");
         }
         else
         {
-            Debug.Log("Código incorrecto, demonio enfadado!");
+            Debug.Log("📞 Teléfono - Código incorrecto");
             if (demonio2 != null)
                 demonio2.ActivarPersecucionRapida();
         }
@@ -74,6 +76,7 @@ public class TelefonoInteract : MonoBehaviour
         CerrarCanvas();
     }
 
+    // Cerrar el canvas del teléfono
     public void CerrarCanvas()
     {
         canvasTelefono.SetActive(false);
@@ -82,9 +85,16 @@ public class TelefonoInteract : MonoBehaviour
         Cursor.visible = false;
     }
 
+    // Método para verificar si la tarea está completada
+    public bool TareaCompletada()
+    {
+        return tareaCompletada;
+    }
+
+    // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {
-        // SOLO mostrar mensaje si no está completada
+        // Solo mostrar mensaje si no está completada y no está abierto
         if (cerca && !abierto && !tareaCompletada)
         {
             GUIStyle estilo = new GUIStyle(GUI.skin.label);

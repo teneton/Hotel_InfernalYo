@@ -5,24 +5,24 @@ public class TrashPickUp : MonoBehaviour
     public PlayerMovement playerMovement;         // Movimiento del jugador
     public Transform trashAnchor;                 // Punto donde se sujeta la basura
     public GameObject trashVisualPrefab;          // Prefab visual que aparece en el contenedor
-    public Transform puntoColocacion;             // Lugar exacto de colocacion
-    public Camera camaraJugador;                  // Camara del jugador
+    public Transform puntoColocacion;             // Lugar exacto de colocación
+    public Camera camaraJugador;                  // Cámara del jugador
     public float radioInteraccion = 0.5f;         // Radio del SphereCast
-    public float distanciaInteraccion = 3.5f;     // Distancia maxima de interaccion
+    public float distanciaInteraccion = 3.5f;     // Distancia máxima de interacción
 
     private bool recogido = false;                // Si la basura ya fue recogida
-    private bool entregado = false;               // Si ya se entrego
+    private bool entregado = false;               // Si ya se entregó
     private bool cerca = false;                   // Si estamos mirando la basura
     private bool cercaContenedor = false;         // Si estamos cerca de la papelera
 
-    // Variables estaticas para contar todas las latas
+    // Variables estáticas para contar todas las latas
     public static int latasRecogidas = 0;
     public static int totalLatas = 0;
     public static int latasEntregadas = 0;
 
     void Start()
     {
-        // Contar este objeto como una lata mas
+        // Contar este objeto como una lata más
         totalLatas++;
     }
 
@@ -31,6 +31,7 @@ public class TrashPickUp : MonoBehaviour
         // Detectar basura para recoger
         cerca = DetectarBasura();
 
+        // Recoger lata si no está recogida y el jugador no lleva objeto
         if (!recogido && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             RecogerLata();
@@ -47,11 +48,14 @@ public class TrashPickUp : MonoBehaviour
         }
     }
 
+    // Recoger una lata
     void RecogerLata()
     {
         recogido = true;
         latasRecogidas++;
         playerMovement.LlevarObjeto(true, true);
+
+        // Colocar en mano del jugador
         transform.SetParent(trashAnchor);
         transform.localPosition = new Vector3(0, -0.4f, 0);
         transform.localRotation = Quaternion.identity;
@@ -59,6 +63,7 @@ public class TrashPickUp : MonoBehaviour
         GetComponent<Collider>().enabled = false;
     }
 
+    // Entregar una lata en el contenedor
     void EntregarLata()
     {
         entregado = true;
@@ -74,17 +79,23 @@ public class TrashPickUp : MonoBehaviour
         }
     }
 
-    // Metodo estatico para verificar si todas las latas fueron entregadas
+    // Método estático para verificar si todas las latas fueron entregadas
     public static bool TodasLasLatasEntregadas()
     {
         return latasEntregadas >= totalLatas;
     }
 
-    // Propiedades estaticas para acceder desde otros scripts
+    // Método estático para verificar si la tarea está completada
+    public static bool TareaCompletada()
+    {
+        return TodasLasLatasEntregadas();
+    }
+
+    // Propiedades estáticas para acceder desde otros scripts
     public static int LatasEntregadas => latasEntregadas;
     public static int TotalLatas => totalLatas;
 
-    // Resetear contador (util si reinicias el juego)
+    // Resetear contador (útil si reinicias el juego)
     public static void ResetearContador()
     {
         latasRecogidas = 0;
@@ -92,7 +103,7 @@ public class TrashPickUp : MonoBehaviour
         totalLatas = 0;
     }
 
-    // Detectar si el jugador esta mirando esta basura
+    // Detectar si el jugador está mirando esta basura
     bool DetectarBasura()
     {
         Ray ray = new Ray(camaraJugador.transform.position, camaraJugador.transform.forward);
@@ -102,7 +113,7 @@ public class TrashPickUp : MonoBehaviour
         return false;
     }
 
-    // Detectar si el jugador esta cerca del contenedor
+    // Detectar si el jugador está cerca del contenedor
     bool DetectarContenedor()
     {
         Collider[] hits = Physics.OverlapSphere(playerMovement.transform.position, 2f);
@@ -114,7 +125,7 @@ public class TrashPickUp : MonoBehaviour
         return false;
     }
 
-    // Mostrar mensajes de interaccion en pantalla
+    // Mostrar mensajes de interacción en pantalla
     void OnGUI()
     {
         GUIStyle estilo = new GUIStyle(GUI.skin.label);

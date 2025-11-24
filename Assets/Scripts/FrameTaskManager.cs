@@ -2,29 +2,29 @@ using UnityEngine;
 
 public class FrameTaskManager : MonoBehaviour
 {
-    public Camera playerCamera;
-    public FrameBehavior[] cuadros;
-
-    private FrameBehavior cuadroActual;
-    private bool cerca = false;
-    private bool tareaCompletada = false;
-
-    public PlayerMovement playerMovement;     // Referencia al jugador
-
+    public Camera playerCamera;                   // Cámara del jugador
+    public FrameBehavior[] cuadros;               // Array de cuadros a enderezar
+    private FrameBehavior cuadroActual;           // Cuadro que el jugador está mirando
+    private bool cerca = false;                   // Si el jugador está cerca de un cuadro
+    private bool tareaCompletada = false;         // Si todos los cuadros están rectos
+    public PlayerMovement playerMovement;         // Referencia al jugador
 
     void Update()
     {
+        // Si la tarea está completada, no hacer nada
         if (tareaCompletada) return;
 
+        // Bloquear interacción si el jugador lleva un objeto
         if (playerMovement != null && playerMovement.EstaLlevandoObjeto)
         {
             cerca = false;
-            cuadroActual = null; // o grifoActual, cuadroActual, etc.
-            return; // Bloquea la interacción si lleva objeto
+            cuadroActual = null;
+            return;
         }
 
+        // Detectar cuadro con raycast
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 4f))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 2f))
         {
             FrameBehavior frame = hit.collider.GetComponent<FrameBehavior>();
             if (frame != null && !frame.EstaRecto)
@@ -44,18 +44,21 @@ public class FrameTaskManager : MonoBehaviour
             cuadroActual = null;
         }
 
+        // Interacción simple con una pulsación de E
         if (cerca && Input.GetKeyDown(KeyCode.E) && cuadroActual != null)
         {
             cuadroActual.Enderezar();
         }
 
+        // Verificar si todos los cuadros están rectos
         if (TodosRectos())
         {
             tareaCompletada = true;
-            Debug.Log("✅ ¡Todos los cuadros están rectos! Tarea completada.");
+            Debug.Log("¡Todos los cuadros están rectos! Tarea completada.");
         }
     }
 
+    // Verifica si todos los cuadros están rectos
     bool TodosRectos()
     {
         foreach (FrameBehavior frame in cuadros)
@@ -65,21 +68,24 @@ public class FrameTaskManager : MonoBehaviour
         return true;
     }
 
-    public bool TareaCompletada => tareaCompletada;
-
-    void OnGUI()
-{
-    if (cerca && cuadroActual != null && !cuadroActual.EstaRecto)
+    // Método para verificar si la tarea está completada
+    public bool TareaCompletada()
     {
-        GUIStyle estilo = new GUIStyle(GUI.skin.label);
-        estilo.fontSize = 40; // ← tamaño más grande
-        estilo.normal.textColor = Color.white;
-        estilo.alignment = TextAnchor.MiddleCenter;
-
-        // Rect más ancho y alto para acomodar el texto grande
-        Rect mensaje = new Rect(Screen.width / 2 - 200, Screen.height - 120, 400, 80);
-        GUI.Label(mensaje, "E para interactuar", estilo);
+        return tareaCompletada;
     }
-}
 
+    // Mostrar mensaje de interacción en pantalla
+    void OnGUI()
+    {
+        if (cerca && cuadroActual != null && !cuadroActual.EstaRecto)
+        {
+            GUIStyle estilo = new GUIStyle(GUI.skin.label);
+            estilo.fontSize = 40;
+            estilo.normal.textColor = Color.white;
+            estilo.alignment = TextAnchor.MiddleCenter;
+
+            Rect mensaje = new Rect(Screen.width / 2 - 200, Screen.height - 120, 400, 80);
+            GUI.Label(mensaje, "E para interactuar", estilo);
+        }
+    }
 }

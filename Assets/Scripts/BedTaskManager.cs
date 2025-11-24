@@ -2,23 +2,30 @@ using UnityEngine;
 
 public class BedTaskManager : MonoBehaviour
 {
-    public Camera playerCamera;
-    public BedObjectBehavior[] objetosCama;
-    private BedObjectBehavior objetoActual;
-    private bool cerca = false;
-    private bool tareaCompletada = false;
-    private float tiempoMantener = 3f;
-    private float contadorMantener = 0f;
-    private bool manteniendo = false;
-    public PlayerMovement playerMovement;
+    public Camera playerCamera;                   // Cámara del jugador
+    public BedObjectBehavior[] objetosCama;       // Array de objetos de la cama
+    private BedObjectBehavior objetoActual;       // Objeto que el jugador está mirando
+    private bool cerca = false;                   // Si el jugador está cerca de un objeto
+    private bool tareaCompletada = false;         // Si todos los objetos están completados
+
+    private float tiempoMantener = 3f;            // Tiempo necesario para interactuar
+    private float contadorMantener = 0f;          // Contador de tiempo manteniendo E
+    private bool manteniendo = false;             // Si se está manteniendo E
+
+    public PlayerMovement playerMovement;         // Referencia al jugador
 
     // Propiedad pública para que GameTaskManager pueda acceder
-    public bool TareaCompletada => tareaCompletada;
+    public bool TareaCompletada()
+    {
+        return tareaCompletada;
+    }
 
     void Update()
     {
+        // Si la tarea está completada, no hacer nada
         if (tareaCompletada) return;
 
+        // Bloquear interacción si el jugador lleva un objeto
         if (playerMovement != null && playerMovement.EstaLlevandoObjeto)
         {
             cerca = false;
@@ -26,8 +33,9 @@ public class BedTaskManager : MonoBehaviour
             return;
         }
 
+        // Detectar objeto con raycast
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 4f))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 2f))
         {
             BedObjectBehavior obj = hit.collider.GetComponent<BedObjectBehavior>();
             if (obj != null && !obj.EstaCompletado)
@@ -47,17 +55,22 @@ public class BedTaskManager : MonoBehaviour
             objetoActual = null;
         }
 
+        // Interacción manteniendo E
         if (cerca && objetoActual != null)
         {
             if (Input.GetKey(KeyCode.E))
             {
                 manteniendo = true;
                 contadorMantener += Time.deltaTime;
+
+                // Cuando se completa el tiempo, interactuar con el objeto
                 if (contadorMantener >= tiempoMantener)
                 {
                     objetoActual.Interactuar();
                     contadorMantener = 0f;
                     manteniendo = false;
+
+                    // Verificar si todos los objetos están completados
                     if (TodosCompletados())
                     {
                         tareaCompletada = true;
@@ -73,6 +86,7 @@ public class BedTaskManager : MonoBehaviour
         }
     }
 
+    // Verifica si todos los objetos están completados
     bool TodosCompletados()
     {
         foreach (BedObjectBehavior obj in objetosCama)
@@ -83,6 +97,7 @@ public class BedTaskManager : MonoBehaviour
         return true;
     }
 
+    // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {
         if (cerca && objetoActual != null && !objetoActual.EstaCompletado)
@@ -96,6 +111,7 @@ public class BedTaskManager : MonoBehaviour
 
             if (manteniendo)
             {
+                // Mostrar progreso de interacción
                 float progreso = contadorMantener / tiempoMantener;
                 GUI.Label(mensaje, $"Haciendo cama... {progreso * 100:F0}%", estilo);
             }

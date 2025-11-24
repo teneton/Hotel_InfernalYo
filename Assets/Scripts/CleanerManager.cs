@@ -4,14 +4,14 @@ using System.Collections.Generic;
 // Administrador que controla la limpieza de varios cubos "limpiables"
 public class CleanerManager : MonoBehaviour
 {
-    public Camera playerCamera;               // Cámara del jugador
-    public GameObject[] cubosLimpiables;      // Lista de cubos limpiables
-    public PlayerMovement playerMovement;     // Referencia al jugador
+    public Camera playerCamera;                   // Cámara del jugador
+    public GameObject[] cubosLimpiables;          // Lista de cubos limpiables
+    public PlayerMovement playerMovement;         // Referencia al jugador
 
     private Dictionary<GameObject, int> interacciones = new Dictionary<GameObject, int>(); // Conteo de interacciones
-    private GameObject cuboActual;            // Cubo que el jugador está mirando
-    private bool cerca = false;               // Si el jugador está cerca mirando un cubo
-    private bool limpiezaCompletada = false;  // Si todas las tareas de limpieza han terminado
+    private GameObject cuboActual;                // Cubo que el jugador está mirando
+    private bool cerca = false;                   // Si el jugador está cerca mirando un cubo
+    private bool limpiezaCompletada = false;      // Si todas las tareas de limpieza han terminado
 
     void Start()
     {
@@ -21,6 +21,7 @@ public class CleanerManager : MonoBehaviour
             cubo.SetActive(true);
             interacciones[cubo] = 0;
 
+            // Asegurar que cada cubo tenga el comportamiento de limpieza
             if (!cubo.TryGetComponent(out CleanerBehavior behavior))
                 cubo.AddComponent<CleanerBehavior>();
         }
@@ -40,7 +41,7 @@ public class CleanerManager : MonoBehaviour
 
         // Detectar cubo con raycast
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 4f))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 2f))
         {
             if (hit.collider.CompareTag("Cleanable"))
             {
@@ -65,12 +66,14 @@ public class CleanerManager : MonoBehaviour
                 interacciones[cuboActual]++;
                 Debug.Log("Cubo " + cuboActual.name + ": " + interacciones[cuboActual] + " interacciones.");
 
+                // Después de 3 interacciones, desactivar el cubo
                 if (interacciones[cuboActual] >= 3)
                 {
                     cuboActual.SetActive(false);
                     interacciones[cuboActual] = 0;
                 }
 
+                // Verificar si todos los cubos están desactivados
                 if (TodosCubosDesactivados())
                 {
                     limpiezaCompletada = true;
@@ -91,7 +94,14 @@ public class CleanerManager : MonoBehaviour
         return true;
     }
 
+    // Propiedad para verificar si la limpieza está completada
     public bool LimpiezaCompletada => limpiezaCompletada;
+
+    // Método para verificar si la tarea está completada
+    public bool TareaCompletada()
+    {
+        return limpiezaCompletada;
+    }
 
     // GUI para mostrar mensaje en pantalla
     void OnGUI()
@@ -107,4 +117,3 @@ public class CleanerManager : MonoBehaviour
         }
     }
 }
-

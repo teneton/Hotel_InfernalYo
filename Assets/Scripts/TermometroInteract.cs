@@ -5,27 +5,25 @@ using TMPro;
 public class TermometroInteract : MonoBehaviour
 {
     [Header("Referencias UI")]
-    public GameObject canvasTermometro;
-    public Slider sliderTemperatura;
-    public TMP_Text textoTemperatura;
-    public Button botonConfirmar;
+    public GameObject canvasTermometro;           // Canvas del termómetro
+    public Slider sliderTemperatura;              // Slider para seleccionar temperatura
+    public TMP_Text textoTemperatura;             // Texto que muestra la temperatura
+    public Button botonConfirmar;                 // Botón de confirmación
 
     [Header("Rango correcto")]
-    public float minCorrecto = 23f;
-    public float maxCorrecto = 25f;
+    public float minCorrecto = 23f;               // Temperatura mínima correcta
+    public float maxCorrecto = 25f;               // Temperatura máxima correcta
 
-    private bool abierto = false;
-    private bool cerca = false;
-    private bool tareaCompletada = false; // NUEVO: Para marcar como completada
+    private bool abierto = false;                 // Si el canvas está abierto
+    private bool cerca = false;                   // Si el jugador está cerca del termómetro
+    private bool tareaCompletada = false;         // Si la tarea está completada
 
-    public DemonBehaviour2 demonio2;
-    public PlayerMovement playerMovement;
-
-    // NUEVA propiedad pública
-    public bool TareaCompletada => tareaCompletada;
+    public DemonBehaviour2 demonio2;              // Referencia al segundo demonio
+    public PlayerMovement playerMovement;         // Referencia al jugador
 
     void Start()
     {
+        // Configurar UI al inicio
         canvasTermometro.SetActive(false);
         sliderTemperatura.onValueChanged.AddListener(ActualizarTexto);
         botonConfirmar.onClick.AddListener(ValidarTemperatura);
@@ -33,9 +31,10 @@ public class TermometroInteract : MonoBehaviour
 
     void Update()
     {
+        // Detectar si el jugador está cerca del termómetro
         cerca = DetectarTermometro();
 
-        // SOLO se puede interactuar si no está completada
+        // Abrir canvas si no está completado, no está abierto y el jugador interactúa
         if (!tareaCompletada && !abierto && !playerMovement.EstaLlevandoObjeto && cerca && Input.GetKeyDown(KeyCode.E))
         {
             abierto = true;
@@ -46,6 +45,7 @@ public class TermometroInteract : MonoBehaviour
         }
     }
 
+    // Detectar si el jugador está mirando el termómetro
     bool DetectarTermometro()
     {
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -55,25 +55,28 @@ public class TermometroInteract : MonoBehaviour
         return false;
     }
 
+    // Actualizar texto de la temperatura cuando cambia el slider
     void ActualizarTexto(float valor)
     {
         textoTemperatura.text = valor.ToString("F1") + " °C";
     }
 
+    // Validar la temperatura seleccionada
     public void ValidarTemperatura()
     {
         float valor = sliderTemperatura.value;
 
-        // MARCAR COMO COMPLETADA INDEPENDIENTEMENTE DEL RESULTADO
+        // Marcar como completada independientemente del resultado
         tareaCompletada = true;
+        Debug.Log("🌡️ Termómetro - Tarea marcada como completada");
 
         if (valor >= minCorrecto && valor <= maxCorrecto)
         {
-            Debug.Log("Temperatura correcta: " + valor);
+            Debug.Log($"🌡️ Termómetro - Temperatura correcta: {valor}");
         }
         else
         {
-            Debug.Log("Temperatura incorrecta: " + valor);
+            Debug.Log($"🌡️ Termómetro - Temperatura incorrecta: {valor}");
             if (demonio2 != null)
                 demonio2.ActivarPersecucionRapida();
         }
@@ -81,6 +84,7 @@ public class TermometroInteract : MonoBehaviour
         CerrarCanvas();
     }
 
+    // Cerrar el canvas del termómetro
     void CerrarCanvas()
     {
         canvasTermometro.SetActive(false);
@@ -89,9 +93,16 @@ public class TermometroInteract : MonoBehaviour
         Cursor.visible = false;
     }
 
+    // Método para verificar si la tarea está completada
+    public bool TareaCompletada()
+    {
+        return tareaCompletada;
+    }
+
+    // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {
-        // SOLO mostrar mensaje si no está completada
+        // Solo mostrar mensaje si no está completada y no está abierto
         if (cerca && !abierto && !tareaCompletada)
         {
             GUIStyle estilo = new GUIStyle(GUI.skin.label);
