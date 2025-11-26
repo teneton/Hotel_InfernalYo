@@ -35,9 +35,10 @@ public class ToallaPickup : MonoBehaviour
 
             // Colocar en mano del jugador
             transform.SetParent(toallaAnchor);
-            transform.localPosition = new Vector3(0, -0.4f, 0);
+            transform.localPosition = new Vector3(0, -0.25f, 0.5f); // un poquito más cerca
             transform.localRotation = Quaternion.identity;
-            transform.localScale = Vector3.one * 0.5f;
+            transform.localScale = Vector3.one * 0.28f;             // ajustamos tamaño para que no tape demasiado
+
 
             GetComponent<Collider>().enabled = false;
 
