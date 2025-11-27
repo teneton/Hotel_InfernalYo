@@ -62,7 +62,7 @@ public class TelefonoInteract : MonoBehaviour
         tareaCompletada = true;
         Debug.Log("📞 Teléfono - Tarea marcada como completada");
 
-        if (codigoIngresado == "HAB-02")
+        if (codigoIngresado == "HAB-01")
         {
             Debug.Log("📞 Teléfono - Código correcto");
         }
