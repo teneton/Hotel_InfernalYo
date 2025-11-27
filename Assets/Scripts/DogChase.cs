@@ -20,8 +20,14 @@ public class DogChase : MonoBehaviour
     public GameObject TermometroCanvas;
     void Start()
     {
-        // Obtener referencias necesarias
-        timerScript = GetComponent<DogTimer>();
+        if (GameManager.instancia != null && GameManager.instancia.perroSacado)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+            // Obtener referencias necesarias
+            timerScript = GetComponent<DogTimer>();
         agent = GetComponent<NavMeshAgent>();
 
         // Suscripción al evento de que el temporizador acabe
