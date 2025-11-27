@@ -283,8 +283,8 @@ MonoBehaviour:
   btnRelojes: {fileID: 838504347}
   puntosTexto: {fileID: 2143797492}
   btnContinuarNoche: {fileID: 689568874}
-  puntosIniciales: 100
-  costeLuces: 10
+  puntosIniciales: 90
+  costeLuces: 15
   costeVelocidad: 25
   costeConductos: 35
   costePerro: 35
@@ -362,7 +362,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Cambiar bombillas: 10'
+  m_text: 'Cambiar bombillas: 15'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
