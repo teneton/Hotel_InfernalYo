@@ -32,6 +32,9 @@ public class SeleccionTareasUI : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         puntosRestantes = puntosIniciales;
         ActualizarTexto();
 
