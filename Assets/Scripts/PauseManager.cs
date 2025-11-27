@@ -11,7 +11,7 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        Cursor.visible = true; 
 
         // Al iniciar, ocultar menús y bloquear cursor
         pauseMenuUI.SetActive(false); 
