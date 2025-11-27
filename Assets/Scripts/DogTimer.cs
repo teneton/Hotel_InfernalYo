@@ -4,6 +4,8 @@ using UnityEngine;
 public class DogTimer : MonoBehaviour
 {
     public float startTime = 10f;   // Tiempo inicial del temporizador
+    public float extraTimePerro = 30f; // Tiempo extra al sacar al perro
+    public float extraTimeAlimentar = 20f; // Tiempo extra si se selecciona alimentar al perro
     private float currentTime;      // Tiempo restante que va disminuyendo
     public bool isChasing = false;  // Indica si el perro está persiguiendo al jugador
     public bool hasExpired = false; // Indica si el temporizador llegó a cero
@@ -14,9 +16,23 @@ public class DogTimer : MonoBehaviour
 
     void Start()
     {
-        // Al iniciar, el temporizador comienza desde el valor inicial
         currentTime = startTime;
+
+        // Si se seleccionó sacar al perro → +30s
+        if (GameManager.instancia != null && GameManager.instancia.perroSacado)
+        {
+            startTime += extraTimePerro;
+            currentTime = startTime;
+        }
+
+        // Si se seleccionó alimentar al perro → +20s
+        if (GameManager.instancia != null && GameManager.instancia.perroAlimentado)
+        {
+            startTime += extraTimeAlimentar;
+            currentTime = startTime;
+        }
     }
+
 
     void Update()
     {

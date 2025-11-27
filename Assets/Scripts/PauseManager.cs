@@ -10,6 +10,9 @@ public class PauseManager : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         // Al iniciar, ocultar menús y bloquear cursor
         pauseMenuUI.SetActive(false); 
         menuCanvas.SetActive(false);
@@ -49,8 +52,14 @@ public class PauseManager : MonoBehaviour
     // Reinicia la escena actual
     public void RestartGame()
     {
-        Time.timeScale = 1f; 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1f;
+
+        if (GameManager.instancia != null)
+        {
+            GameManager.instancia.ResetGame();
+        }
+
+        SceneManager.LoadScene("PruebaDeMenuDeDia");
     }
 
     // Abre el menú de opciones desde el menú de pausa
@@ -73,8 +82,15 @@ public class PauseManager : MonoBehaviour
     public void backToMainMenu()
     {
         Time.timeScale = 1f;
-        Cursor.lockState = CursorLockMode.None; 
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        // Reiniciar estados del GameManager para empezar desde cero
+        if (GameManager.instancia != null)
+        {
+            GameManager.instancia.ResetGame();
+        }
+
         SceneManager.LoadScene("MainMenuControlador");
     }
 }

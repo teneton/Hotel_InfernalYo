@@ -314,7 +314,6 @@ public class GameTaskManager : MonoBehaviour
     }
 
     // Dibuja la interfaz de usuario
-    // Dibuja la interfaz de usuario
     void OnGUI()
     {
         if (Time.timeScale == 0f) return;
@@ -338,69 +337,69 @@ public class GameTaskManager : MonoBehaviour
         float x = 35f;
         float y = 55f;
 
-        // CONTADOR DE TAREAS
-        int tareasCompletadas = ContarTareasCompletadas();
-        int totalTareas = 12;
-
-        GUIStyle estiloContador = new GUIStyle(GUI.skin.label);
-        estiloContador.fontSize = 36;
-        estiloContador.normal.textColor = Color.yellow;
-        estiloContador.alignment = TextAnchor.UpperCenter;
-        estiloContador.fontStyle = FontStyle.Bold;
-
-        string textoContador = $"Tareas: {tareasCompletadas}/{totalTareas}";
-        GUI.Label(new Rect(Screen.width / 2 - 150, 20, 300, 50), textoContador, estiloContador);
-
-        // BARRA TIEMPO GENERAL
-        GUI.color = Color.gray;
-        GUI.DrawTexture(new Rect(x, y, anchoBarra, altoBarra), Texture2D.whiteTexture);
-
-        float porcentajeGeneral = tiempoRestanteGeneral / tiempoGeneral;
-        GUI.color = juegoGanado ? Color.green : Color.cyan;
-        GUI.DrawTexture(new Rect(x, y, anchoBarra * porcentajeGeneral, altoBarra), Texture2D.whiteTexture);
-
-        string textoGeneral = juegoGanado ? "¡VICTORIA!" : $"Tiempo total: {tiempoRestanteGeneral:F0}s";
-        GUI.color = juegoGanado ? Color.green : Color.white;
-        GUI.Label(new Rect(x, y - 45, anchoBarra, 45), textoGeneral, estiloTexto);
-
-        // BARRA TIEMPO DEMONIO
-        if (!demonioCalmado && !juegoGanado)
+        // Mostrar cronómetros solo si la tarea "Arreglar relojes" está seleccionada
+        if (GameManager.instancia != null && GameManager.instancia.relojesArreglados)
         {
-            float tiempoMostrar = Mathf.Max(0f, tiempoRestanteDemonio);
-            float porcentajeDemonio = tiempoMostrar / tiempoDemonio;
+            int tareasCompletadas = ContarTareasCompletadas();
+            int totalTareas = 12;
 
+            GUIStyle estiloContador = new GUIStyle(GUI.skin.label);
+            estiloContador.fontSize = 36;
+            estiloContador.normal.textColor = Color.yellow;
+            estiloContador.alignment = TextAnchor.UpperCenter;
+            estiloContador.fontStyle = FontStyle.Bold;
+
+            string textoContador = $"Tareas: {tareasCompletadas}/{totalTareas}";
+            GUI.Label(new Rect(Screen.width / 2 - 150, 20, 300, 50), textoContador, estiloContador);
+
+            // BARRA TIEMPO GENERAL
             GUI.color = Color.gray;
-            GUI.DrawTexture(new Rect(x, y + 60, anchoBarra, 25), Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(x, y, anchoBarra, altoBarra), Texture2D.whiteTexture);
 
-            if (tiempoMostrar <= 0f || modoMatarActivado)
-                GUI.color = Color.red;
-            else if (persecucionActivada)
-                GUI.color = new Color(1f, 0.5f, 0f);
-            else
-                GUI.color = new Color(1f, 0.7f, 0.2f);
+            float porcentajeGeneral = tiempoRestanteGeneral / tiempoGeneral;
+            GUI.color = juegoGanado ? Color.green : Color.cyan;
+            GUI.DrawTexture(new Rect(x, y, anchoBarra * porcentajeGeneral, altoBarra), Texture2D.whiteTexture);
 
-            GUI.DrawTexture(new Rect(x, y + 60, anchoBarra * porcentajeDemonio, 25), Texture2D.whiteTexture);
+            string textoGeneral = juegoGanado ? "¡VICTORIA!" : $"Tiempo total: {tiempoRestanteGeneral:F0}s";
+            GUI.color = juegoGanado ? Color.green : Color.white;
+            GUI.Label(new Rect(x, y - 45, anchoBarra, 45), textoGeneral, estiloTexto);
 
-            GUIStyle estiloDemonio = new GUIStyle(GUI.skin.label);
-            estiloDemonio.fontSize = 28;
-            estiloDemonio.normal.textColor = Color.white;
-            estiloDemonio.alignment = TextAnchor.UpperLeft;
-            estiloDemonio.fontStyle = FontStyle.Bold;
+            // BARRA TIEMPO DEMONIO
+            if (!demonioCalmado && !juegoGanado)
+            {
+                float tiempoMostrar = Mathf.Max(0f, tiempoRestanteDemonio);
+                float porcentajeDemonio = tiempoMostrar / tiempoDemonio;
 
-            string textoDemonio = tiempoMostrar <= 0f ? "PELIGRO: Demonio desatado!" : $"Demonio: {tiempoMostrar:F0}s / 210s";
-            GUI.Label(new Rect(x, y + 90, anchoBarra, 35), textoDemonio, estiloDemonio);
+                GUI.color = Color.gray;
+                GUI.DrawTexture(new Rect(x, y + 60, anchoBarra, 25), Texture2D.whiteTexture);
+
+                if (tiempoMostrar <= 0f || modoMatarActivado)
+                    GUI.color = Color.red;
+                else if (persecucionActivada)
+                    GUI.color = new Color(1f, 0.5f, 0f);
+                else
+                    GUI.color = new Color(1f, 0.7f, 0.2f);
+
+                GUI.DrawTexture(new Rect(x, y + 60, anchoBarra * porcentajeDemonio, 25), Texture2D.whiteTexture);
+
+                GUIStyle estiloDemonio = new GUIStyle(GUI.skin.label);
+                estiloDemonio.fontSize = 28;
+                estiloDemonio.normal.textColor = Color.white;
+                estiloDemonio.alignment = TextAnchor.UpperLeft;
+                estiloDemonio.fontStyle = FontStyle.Bold;
+
+                string textoDemonio = tiempoMostrar <= 0f ? "PELIGRO: Demonio desatado!" : $"Demonio: {tiempoMostrar:F0}s / 210s";
+                GUI.Label(new Rect(x, y + 90, anchoBarra, 35), textoDemonio, estiloDemonio);
+            }
+
+            // ESTADO DEL DEMONIO
+            string estadoDemonio = demonioCalmado ? "DEMONIO: CALMADO" :
+                                  (modoMatarActivado ? "DEMONIO: MODO MATAR" :
+                                  (persecucionActivada ? "DEMONIO: ENFADADO" : "DEMONIO: TRANQUILO"));
+            GUI.Label(new Rect(x, y + 130, anchoBarra, 45), estadoDemonio, estiloTexto);
+
+            if (juegoGanado)
+                GUI.Label(new Rect(x, y + 180, anchoBarra, 45), "TODAS LAS TAREAS COMPLETADAS", estiloTexto);
         }
-
-        // ESTADO DEL DEMONIO
-        string estadoDemonio = demonioCalmado ? "DEMONIO: CALMADO" :
-                              (modoMatarActivado ? "DEMONIO: MODO MATAR" :
-                              (persecucionActivada ? "DEMONIO: ENFADADO" : "DEMONIO: TRANQUILO"));
-        GUI.Label(new Rect(x, y + 130, anchoBarra, 45), estadoDemonio, estiloTexto);
-
-        if (juegoGanado)
-            GUI.Label(new Rect(x, y + 180, anchoBarra, 45), "TODAS LAS TAREAS COMPLETADAS", estiloTexto);
     }
-
-
-
 }

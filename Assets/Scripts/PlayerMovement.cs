@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 // Controla el movimiento del jugador incluyendo caminar, correr, salto,
 // doble salto y dash. Ahora también gestiona si el objeto que lleva
-// reduce o no la velocidad.
+// reduce o no la velocidad y si la tarea de velocidad fue seleccionada.
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -55,6 +55,13 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
+
+        // Ajustar velocidades según la tarea seleccionada en el Canvas
+        if (!GameManager.instancia.velocidadNormalSeleccionada)
+        {
+            speed *= 0.6f;        // reduce velocidad normal (ej. 40% menos)
+            sprintSpeed *= 0.6f;  // reduce velocidad sprint
+        }
     }
 
     void Update()

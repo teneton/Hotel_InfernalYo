@@ -129,7 +129,7 @@ public class DogChase : MonoBehaviour
         }
 
         // Mostrar temporizador mientras el perro no persigue
-        if (!timerScript.isChasing)
+        if (!timerScript.isChasing && GameManager.instancia.relojesArreglados)
         {
             GUIStyle timerStyle = new GUIStyle(GUI.skin.label);
             timerStyle.fontSize = 40;

@@ -11,6 +11,8 @@ public class OptionsManager : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         // Inicializar sliders con los valores guardados en SettingsManager
         sensibilidadSlider.value = SettingsManager.Instance.sensibilidad;
         volumenSlider.value = SettingsManager.Instance.volumen;

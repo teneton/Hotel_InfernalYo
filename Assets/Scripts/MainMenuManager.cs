@@ -18,12 +18,13 @@ public class MainMenuManager : MonoBehaviour
     }
     public void PlayGame()
     {
-        Time.timeScale = 1f; 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Time.timeScale = 1f;
 
-        SceneManager.LoadScene("MenuDia");
-    } 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        SceneManager.LoadScene("PruebaDeMenuDeDia");
+    }
 
 
     public void OpenOptions()
