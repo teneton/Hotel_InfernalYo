@@ -26,6 +26,11 @@ public class GameOverUITMP : MonoBehaviour
         if (mostrarGameOver && Input.GetKeyDown(KeyCode.U))
         {
             Time.timeScale = 1f; // Reactivar el tiempo antes de reiniciar
+            if (GameManager.instancia != null)
+            {
+                GameManager.instancia.ResetGame();
+            }
+
             SceneManager.LoadScene("PruebaDeMenuDeDia");
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
