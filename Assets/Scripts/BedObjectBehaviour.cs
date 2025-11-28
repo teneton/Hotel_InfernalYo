@@ -8,7 +8,18 @@ public class BedObjectBehavior : MonoBehaviour
     public Vector3 rotacionFinal;   // Rotación específica para este objeto
     public Vector3 posicionFinal;   // Desplazamiento específico para este objeto
 
+    // 🔄 NUEVO: Guardar transformación inicial
+    private Vector3 posicionInicial;
+    private Quaternion rotacionInicial;
+
     public bool EstaCompletado => fase >= 2;
+
+    void Start()
+    {
+        // Guardar transformación inicial
+        posicionInicial = transform.position;
+        rotacionInicial = transform.rotation;
+    }
 
     public void Interactuar()
     {
@@ -26,5 +37,17 @@ public class BedObjectBehavior : MonoBehaviour
             fase = 2;
             Debug.Log($"{gameObject.name} movido (fase 2).");
         }
+    }
+
+    // 🔄 NUEVO MÉTODO: Resetear objeto de cama a estado inicial
+    public void ResetObject()
+    {
+        fase = 0;
+
+        // Restaurar posición y rotación inicial
+        transform.position = posicionInicial;
+        transform.rotation = rotacionInicial;
+
+        Debug.Log($"🛏️ Objeto de cama {gameObject.name} reseteado a estado inicial");
     }
 }

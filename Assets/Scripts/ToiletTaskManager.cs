@@ -96,6 +96,29 @@ public class ToiletTaskManager : MonoBehaviour
         return tareaCompletada;
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear la tarea de váteres
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando tarea de váteres...");
+
+        tareaCompletada = false;
+        cerca = false;
+        vaterActual = null;
+        manteniendo = false;
+        contadorMantener = 0f;
+
+        // Resetear cada váter individual
+        foreach (ToiletBehavior toilet in vateres)
+        {
+            if (toilet != null)
+            {
+                toilet.ResetToilet();
+            }
+        }
+
+        Debug.Log("✅ Tarea de váteres reseteada");
+    }
+
     // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {

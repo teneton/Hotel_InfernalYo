@@ -11,9 +11,18 @@ public class FrameBehavior : MonoBehaviour
     [Header("Velocidad de enderezado")]
     public float velocidadRotacion = 120f; // grados por segundo
 
+    // 🔄 NUEVO: Guardar rotación inicial
+    private Quaternion rotacionInicial;
+
     private Quaternion rotacionObjetivo;
 
     public bool EstaRecto => recto;
+
+    void Start()
+    {
+        // Guardar rotación inicial
+        rotacionInicial = transform.rotation;
+    }
 
     public void Enderezar()
     {
@@ -43,5 +52,17 @@ public class FrameBehavior : MonoBehaviour
                 Debug.Log($"Cuadro {gameObject.name} enderezado.");
             }
         }
+    }
+
+    //NUEVO MÉTODO: Resetear cuadro a rotación inicial
+    public void ResetFrame()
+    {
+        recto = false;
+        enderezando = false;
+
+        // Restaurar rotación inicial
+        transform.rotation = rotacionInicial;
+
+        Debug.Log($"🖼️ Cuadro {gameObject.name} reseteado a posición inicial");
     }
 }

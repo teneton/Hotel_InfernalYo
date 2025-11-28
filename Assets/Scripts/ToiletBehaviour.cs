@@ -34,4 +34,17 @@ public class ToiletBehavior : MonoBehaviour
             aguaRenderer.material = materialSucio;
         }
     }
+
+    // NUEVO MÉTODO: Resetear váter a estado sucio
+    public void ResetToilet()
+    {
+        limpio = false;
+
+        if (aguaRenderer != null && materialSucio != null)
+        {
+            aguaRenderer.material = materialSucio;
+        }
+
+        Debug.Log($"🚽 Váter {gameObject.name} reseteado a estado sucio");
+    }
 }

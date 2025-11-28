@@ -91,6 +91,26 @@ public class TelefonoInteract : MonoBehaviour
         return tareaCompletada;
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear teléfono
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando teléfono...");
+
+        tareaCompletada = false;
+        abierto = false;
+        cerca = false;
+
+        // Cerrar canvas si está abierto
+        if (canvasTelefono != null)
+            canvasTelefono.SetActive(false);
+
+        // Restaurar estado del cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        Debug.Log("✅ Teléfono reseteado");
+    }
+
     // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {

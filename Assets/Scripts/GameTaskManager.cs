@@ -29,9 +29,6 @@ public class GameTaskManager : MonoBehaviour
     private bool juegoGanado = false;             // Si el jugador gano
     private bool juegoPerdido = false;            // Si el jugador perdio
 
-
-
-
     void Start()
     {
         // Inicializar temporizadores
@@ -313,6 +310,122 @@ public class GameTaskManager : MonoBehaviour
         }
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear todas las tareas
+    public void ResetAllTasks()
+    {
+        Debug.Log("🔄 Reiniciando todas las tareas...");
+
+        // 1. Variables estáticas
+        TrashPickUp.ResetearContador();
+        ToallaPickup.toallaEntregadaStatic = false;
+        PatitoPickup.patitosEntregados = 0;
+        // PatitoPickup.totalPatitos se recalcula automáticamente en Start
+
+        // 2. Resetear todos los managers
+        ResetAllManagers();
+
+        // 3. Resetear variables internas
+        juegoGanado = false;
+        juegoPerdido = false;
+        demonioCalmado = false;
+        persecucionActivada = false;
+        modoMatarActivado = false;
+
+        // 4. Reiniciar temporizadores
+        tiempoRestanteDemonio = tiempoDemonio;
+        tiempoRestanteGeneral = tiempoGeneral;
+
+        Debug.Log("✅ Todas las tareas reiniciadas");
+    }
+
+    // 🔄 NUEVO MÉTODO: Resetear todos los managers
+    private void ResetAllManagers()
+    {
+        // Bed Task Manager
+        BedTaskManager[] bedManagers = FindObjectsByType<BedTaskManager>(FindObjectsSortMode.None);
+        foreach (var manager in bedManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Toilet Task Manager
+        ToiletTaskManager[] toiletManagers = FindObjectsByType<ToiletTaskManager>(FindObjectsSortMode.None);
+        foreach (var manager in toiletManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Cleaner Manager
+        CleanerManager[] cleanerManagers = FindObjectsByType<CleanerManager>(FindObjectsSortMode.None);
+        foreach (var manager in cleanerManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Faucet Task Manager
+        FaucetTaskManager[] faucetManagers = FindObjectsByType<FaucetTaskManager>(FindObjectsSortMode.None);
+        foreach (var manager in faucetManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Frame Task Manager
+        FrameTaskManager[] frameManagers = FindObjectsByType<FrameTaskManager>(FindObjectsSortMode.None);
+        foreach (var manager in frameManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Lamp Task Manager
+        LampTaskManager[] lampManagers = FindObjectsByType<LampTaskManager>(FindObjectsSortMode.None);
+        foreach (var manager in lampManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Telefono Interact
+        TelefonoInteract[] telefonoManagers = FindObjectsByType<TelefonoInteract>(FindObjectsSortMode.None);
+        foreach (var manager in telefonoManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Termometro Interact
+        TermometroInteract[] termometroManagers = FindObjectsByType<TermometroInteract>(FindObjectsSortMode.None);
+        foreach (var manager in termometroManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Ventilador Interact
+        VentiladorInteract[] ventiladorManagers = FindObjectsByType<VentiladorInteract>(FindObjectsSortMode.None);
+        foreach (var manager in ventiladorManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Toalla Pickup
+        ToallaPickup[] toallaManagers = FindObjectsByType<ToallaPickup>(FindObjectsSortMode.None);
+        foreach (var manager in toallaManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Patito Pickup
+        PatitoPickup[] patitoManagers = FindObjectsByType<PatitoPickup>(FindObjectsSortMode.None);
+        foreach (var manager in patitoManagers)
+        {
+            manager.ResetTask();
+        }
+
+        // Trash Pickup
+        TrashPickUp[] trashManagers = FindObjectsByType<TrashPickUp>(FindObjectsSortMode.None);
+        foreach (var manager in trashManagers)
+        {
+            manager.ResetTask();
+        }
+    }
+
     // Dibuja la interfaz de usuario
     void OnGUI()
     {
@@ -351,7 +464,6 @@ public class GameTaskManager : MonoBehaviour
 
             string textoContador = $"Tareas: {tareasCompletadas}/{totalTareas}";
             GUI.Label(new Rect(Screen.width / 2 - 150, 20, 300, 50), textoContador, estiloContador);
-
 
             if (GameManager.instancia.relojesArreglados)
             {

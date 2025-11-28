@@ -1,8 +1,5 @@
 using UnityEngine;
 
-
-
-
 public class LampBehavior : MonoBehaviour
 {
     private Light lampLight;
@@ -10,11 +7,15 @@ public class LampBehavior : MonoBehaviour
     private float intensidadObjetivo = 300f; // Intensidad final al encender
     private float velocidadEncendido = 300f; // Velocidad del efecto de encendido
 
+    // NUEVO: Guardar intensidad inicial
+    private float intensidadInicial = 0f;
+
     void Start()
     {
         lampLight = GetComponent<Light>();
         if (lampLight != null)
         {
+            intensidadInicial = lampLight.intensity;
             lampLight.intensity = 0f; // Empieza apagada
         }
     }
@@ -41,5 +42,18 @@ public class LampBehavior : MonoBehaviour
                     lampLight.intensity = intensidadObjetivo;
             }
         }
+    }
+
+    // NUEVO MÉTODO: Resetear lámpara a estado inicial
+    public void ResetLamp()
+    {
+        encendida = false;
+
+        if (lampLight != null)
+        {
+            lampLight.intensity = 0f; // Volver a apagada
+        }
+
+        Debug.Log($" Lámpara {gameObject.name} reseteada");
     }
 }

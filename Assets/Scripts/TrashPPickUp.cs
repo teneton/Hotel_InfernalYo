@@ -15,6 +15,11 @@ public class TrashPickUp : MonoBehaviour
     private bool cerca = false;                   // Si estamos mirando la basura
     private bool cercaContenedor = false;         // Si estamos cerca de la papelera
 
+    // ?? NUEVO: Guardar transform inicial
+    private Vector3 posicionInicial;
+    private Quaternion rotacionInicial;
+    private Vector3 escalaInicial;
+
     // Variables estáticas para contar todas las latas
     public static int latasRecogidas = 0;
     public static int totalLatas = 0;
@@ -22,6 +27,11 @@ public class TrashPickUp : MonoBehaviour
 
     void Start()
     {
+        // Guardar transform inicial
+        posicionInicial = transform.position;
+        rotacionInicial = transform.rotation;
+        escalaInicial = transform.localScale;
+
         // Contar este objeto como una lata más
         totalLatas++;
     }
@@ -101,6 +111,31 @@ public class TrashPickUp : MonoBehaviour
         latasRecogidas = 0;
         latasEntregadas = 0;
         totalLatas = 0;
+    }
+
+    // ?? NUEVO MÉTODO: Resetear lata individual
+    public void ResetTask()
+    {
+        Debug.Log("?? Reseteando lata de basura...");
+
+        recogido = false;
+        entregado = false;
+        cerca = false;
+        cercaContenedor = false;
+
+        // Reactivar el objeto
+        gameObject.SetActive(true);
+
+        // Restaurar transform inicial
+        transform.SetParent(null);
+        transform.position = posicionInicial;
+        transform.rotation = rotacionInicial;
+        transform.localScale = escalaInicial;
+
+        // Reactivar collider
+        GetComponent<Collider>().enabled = true;
+
+        Debug.Log("? Lata de basura reseteada a estado inicial");
     }
 
     // Detectar si el jugador está mirando esta basura

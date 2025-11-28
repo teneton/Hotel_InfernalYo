@@ -74,6 +74,27 @@ public class FrameTaskManager : MonoBehaviour
         return tareaCompletada;
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear la tarea de cuadros
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando tarea de cuadros...");
+
+        tareaCompletada = false;
+        cerca = false;
+        cuadroActual = null;
+
+        // Resetear cada cuadro individual
+        foreach (FrameBehavior frame in cuadros)
+        {
+            if (frame != null)
+            {
+                frame.ResetFrame();
+            }
+        }
+
+        Debug.Log("✅ Tarea de cuadros reseteada");
+    }
+
     // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {

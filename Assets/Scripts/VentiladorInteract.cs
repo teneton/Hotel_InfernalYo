@@ -111,6 +111,33 @@ public class VentiladorInteract : MonoBehaviour
         return tareaCompletada;
     }
 
+    // ?? NUEVO MÉTODO: Resetear ventilador
+    public void ResetTask()
+    {
+        Debug.Log("?? Reseteando ventilador...");
+
+        tareaCompletada = false;
+        abierto = false;
+        cerca = false;
+
+        // Cerrar canvas si está abierto
+        if (canvasVentilador != null)
+            canvasVentilador.SetActive(false);
+
+        // Restaurar estado del cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // Resetear UI a valores por defecto (opcional)
+        if (sliderTiempo != null)
+            sliderTiempo.value = sliderTiempo.minValue;
+
+        if (dropdownPotencia != null)
+            dropdownPotencia.value = 0;
+
+        Debug.Log("? Ventilador reseteado");
+    }
+
     // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {

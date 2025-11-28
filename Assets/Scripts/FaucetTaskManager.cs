@@ -74,6 +74,27 @@ public class FaucetTaskManager : MonoBehaviour
         return tareaCompletada;
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear la tarea de grifos
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando tarea de grifos...");
+
+        tareaCompletada = false;
+        cerca = false;
+        grifoActual = null;
+
+        // Resetear cada grifo individual
+        foreach (FaucetBehavior faucet in grifos)
+        {
+            if (faucet != null)
+            {
+                faucet.ResetFaucet();
+            }
+        }
+
+        Debug.Log("✅ Tarea de grifos reseteada");
+    }
+
     // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {

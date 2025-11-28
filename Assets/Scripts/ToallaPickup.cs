@@ -17,8 +17,21 @@ public class ToallaPickup : MonoBehaviour
     private bool cerca = false;                   // Si estamos mirando la toalla
     private bool cercaEntrega = false;            // Si estamos cerca del punto de entrega
 
+    // 🔄 NUEVO: Guardar posición y rotación inicial
+    private Vector3 posicionInicial;
+    private Quaternion rotacionInicial;
+    private Vector3 escalaInicial;
+
     // VARIABLE ESTÁTICA para rastrear si la toalla fue entregada
     public static bool toallaEntregadaStatic = false;
+
+    void Start()
+    {
+        // Guardar transform inicial
+        posicionInicial = transform.position;
+        rotacionInicial = transform.rotation;
+        escalaInicial = transform.localScale;
+    }
 
     void Update()
     {
@@ -38,7 +51,6 @@ public class ToallaPickup : MonoBehaviour
             transform.localPosition = new Vector3(0, -0.25f, 0.5f); // un poquito más cerca
             transform.localRotation = Quaternion.identity;
             transform.localScale = Vector3.one * 0.28f;             // ajustamos tamaño para que no tape demasiado
-
 
             GetComponent<Collider>().enabled = false;
 
@@ -126,6 +138,31 @@ public class ToallaPickup : MonoBehaviour
     public static bool TareaCompletadaStatic()
     {
         return toallaEntregadaStatic;
+    }
+
+    // 🔄 NUEVO MÉTODO: Resetear toalla a estado inicial
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando toalla...");
+
+        recogida = false;
+        entregada = false;
+        cerca = false;
+        cercaEntrega = false;
+
+        // Reactivar el objeto
+        gameObject.SetActive(true);
+
+        // Restaurar transform inicial
+        transform.SetParent(null);
+        transform.position = posicionInicial;
+        transform.rotation = rotacionInicial;
+        transform.localScale = escalaInicial;
+
+        // Reactivar collider
+        GetComponent<Collider>().enabled = true;
+
+        Debug.Log("✅ Toalla reseteada a estado inicial");
     }
 
     // GUI para mostrar mensajes en pantalla

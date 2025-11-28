@@ -99,6 +99,30 @@ public class TermometroInteract : MonoBehaviour
         return tareaCompletada;
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear termómetro
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando termómetro...");
+
+        tareaCompletada = false;
+        abierto = false;
+        cerca = false;
+
+        // Cerrar canvas si está abierto
+        if (canvasTermometro != null)
+            canvasTermometro.SetActive(false);
+
+        // Restaurar estado del cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // Resetear slider a valor por defecto (opcional)
+        if (sliderTemperatura != null)
+            sliderTemperatura.value = sliderTemperatura.minValue;
+
+        Debug.Log("✅ Termómetro reseteado");
+    }
+
     // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {

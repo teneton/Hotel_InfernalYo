@@ -4,17 +4,16 @@ using UnityEngine.SceneManagement;
 // Maneja la pausa del juego, menú de pausa y navegación hacia opciones o menú principal
 public class PauseManager : MonoBehaviour
 {
-    public GameObject pauseMenuUI;  // Canvas del menú de pausa
-    private bool isPaused = false;  // Indica si el juego está pausado
-    public GameObject menuCanvas;   // Canvas de opciones dentro del menú de pausa
+    public GameObject pauseMenuUI; // Canvas del menú de pausa
+    private bool isPaused = false; // Indica si el juego está pausado
+    public GameObject menuCanvas; // Canvas de opciones dentro del menú de pausa
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true; 
-
+        Cursor.visible = true;
         // Al iniciar, ocultar menús y bloquear cursor
-        pauseMenuUI.SetActive(false); 
+        pauseMenuUI.SetActive(false);
         menuCanvas.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -54,6 +53,13 @@ public class PauseManager : MonoBehaviour
     {
         Time.timeScale = 1f;
 
+        // NUEVO: Resetear todas las tareas antes de recargar
+        GameTaskManager taskManager = FindFirstObjectByType<GameTaskManager>();
+        if (taskManager != null)
+        {
+            taskManager.ResetAllTasks();
+        }
+
         if (GameManager.instancia != null)
         {
             GameManager.instancia.ResetGame();
@@ -65,17 +71,17 @@ public class PauseManager : MonoBehaviour
     // Abre el menú de opciones desde el menú de pausa
     public void OpenOptions()
     {
-        Cursor.lockState = CursorLockMode.None;  
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        pauseMenuUI.SetActive(false);     
-        menuCanvas.SetActive(true);     
+        pauseMenuUI.SetActive(false);
+        menuCanvas.SetActive(true);
     }
 
     // Cierra el menú de opciones y vuelve al menú de pausa
     public void CloseOptions()
     {
-        menuCanvas.SetActive(false);     
-        pauseMenuUI.SetActive(true);     
+        menuCanvas.SetActive(false);
+        pauseMenuUI.SetActive(true);
     }
 
     // Vuelve al menú principal desde el juego pausado
@@ -84,6 +90,13 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        // NUEVO: Resetear todas las tareas antes de cambiar de escena
+        GameTaskManager taskManager = FindFirstObjectByType<GameTaskManager>();
+        if (taskManager != null)
+        {
+            taskManager.ResetAllTasks();
+        }
 
         // Reiniciar estados del GameManager para empezar desde cero
         if (GameManager.instancia != null)

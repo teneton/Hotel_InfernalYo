@@ -18,12 +18,22 @@ public class PatitoPickup : MonoBehaviour
     private bool cerca = false;                   // Si estamos mirando el patito
     private bool cercaBanera = false;             // Si estamos cerca de la bañera
 
+    // 🔄 NUEVO: Guardar transform inicial
+    private Vector3 posicionInicial;
+    private Quaternion rotacionInicial;
+    private Vector3 escalaInicial;
+
     // Variables estáticas para contar todos los patitos
     public static int patitosEntregados = 0;
     public static int totalPatitos = 0;
 
     void Start()
     {
+        // Guardar transform inicial
+        posicionInicial = transform.position;
+        rotacionInicial = transform.rotation;
+        escalaInicial = transform.localScale;
+
         // Contar este patito en el total
         totalPatitos++;
         if (patitoUI != null)
@@ -111,6 +121,35 @@ public class PatitoPickup : MonoBehaviour
     public static bool TareaCompletada()
     {
         return patitosEntregados >= totalPatitos;
+    }
+
+    // 🔄 NUEVO MÉTODO: Resetear patito a estado inicial
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando patito...");
+
+        recogido = false;
+        entregado = false;
+        cerca = false;
+        cercaBanera = false;
+
+        // Restaurar transform inicial
+        transform.SetParent(null);
+        transform.position = posicionInicial;
+        transform.rotation = rotacionInicial;
+        transform.localScale = escalaInicial;
+
+        // Reactivar renderers y collider
+        foreach (var r in GetComponentsInChildren<MeshRenderer>())
+            r.enabled = true;
+
+        GetComponent<Collider>().enabled = true;
+
+        // Ocultar UI
+        if (patitoUI != null)
+            patitoUI.SetActive(false);
+
+        Debug.Log("✅ Patito reseteado a estado inicial");
     }
 
     // Mostrar mensajes de interacción en pantalla

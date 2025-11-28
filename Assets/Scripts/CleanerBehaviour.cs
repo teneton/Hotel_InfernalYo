@@ -7,10 +7,20 @@ public class CleanerBehavior : MonoBehaviour
     private Renderer rend;
 
     public Material materialSucio;
+
+    // ?? NUEVO: Guardar material inicial
+    private Material materialInicial;
+
     void Start()
     {
         // Obtiene el Renderer del objeto al iniciar
         rend = GetComponent<Renderer>();
+
+        // Guardar material inicial
+        if (rend != null)
+        {
+            materialInicial = rend.material;
+        }
 
         // Si el Renderer existe, cambia el color del material a verde
         if (rend != null)
@@ -28,6 +38,21 @@ public class CleanerBehavior : MonoBehaviour
     {
         // Muestra un mensaje en consola indicando que el objeto fue deshabilitado o "limpiado"
         Debug.Log(gameObject.name + " ha sido limpiado.");
+    }
+
+    // ?? NUEVO MÉTODO: Resetear limpiador
+    public void ResetCleaner()
+    {
+        // Reactivar el objeto
+        gameObject.SetActive(true);
+
+        // Restaurar material inicial
+        if (rend != null && materialInicial != null)
+        {
+            rend.material = materialInicial;
+        }
+
+        Debug.Log($"?? Limpiador {gameObject.name} reseteado");
     }
 }
 

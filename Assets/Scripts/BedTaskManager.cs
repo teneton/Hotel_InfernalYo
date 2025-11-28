@@ -97,6 +97,29 @@ public class BedTaskManager : MonoBehaviour
         return true;
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear la tarea de la cama
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando tarea de la cama...");
+
+        tareaCompletada = false;
+        cerca = false;
+        objetoActual = null;
+        manteniendo = false;
+        contadorMantener = 0f;
+
+        // Resetear cada objeto de cama individual
+        foreach (BedObjectBehavior obj in objetosCama)
+        {
+            if (obj != null)
+            {
+                obj.ResetObject();
+            }
+        }
+
+        Debug.Log("✅ Tarea de la cama reseteada");
+    }
+
     // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {

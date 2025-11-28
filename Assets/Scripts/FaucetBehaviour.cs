@@ -8,8 +8,19 @@ public class FaucetBehavior : MonoBehaviour
     [Header("Objeto visual del agua")]
     public GameObject aguaVisual; // ← El objeto que representa el agua
 
+    // 🔄 NUEVO: Guardar estado inicial
+    private Material materialInicial;
+    private Color colorInicial;
+
     void Start()
     {
+        // Guardar estado inicial
+        if (rend != null)
+        {
+            materialInicial = rend.material;
+            colorInicial = rend.material.color;
+        }
+
         if (aguaVisual != null)
             aguaVisual.SetActive(true); // Empieza con agua activa
     }
@@ -46,5 +57,26 @@ public class FaucetBehavior : MonoBehaviour
 
             Debug.Log($"Grifo {gameObject.name} abierto.");
         }
+    }
+
+    // 🔄 NUEVO MÉTODO: Resetear grifo a estado inicial
+    public void ResetFaucet()
+    {
+        cerrado = false;
+
+        // Restaurar material y color inicial
+        if (rend != null)
+        {
+            rend.material = materialInicial;
+            rend.material.color = colorInicial;
+        }
+
+        // Reactivar agua visual
+        if (aguaVisual != null)
+        {
+            aguaVisual.SetActive(true);
+        }
+
+        Debug.Log($"🚰 Grifo {gameObject.name} reseteado");
     }
 }

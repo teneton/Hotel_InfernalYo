@@ -75,6 +75,27 @@ public class LampTaskManager : MonoBehaviour
         return tareaCompletada;
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear la tarea de lámparas
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando tarea de lámparas...");
+
+        tareaCompletada = false;
+        cerca = false;
+        lamparaActual = null;
+
+        // Resetear cada lámpara individual
+        foreach (LampBehavior lamp in lamparas)
+        {
+            if (lamp != null)
+            {
+                lamp.ResetLamp();
+            }
+        }
+
+        Debug.Log("✅ Tarea de lámparas reseteada");
+    }
+
     // Mostrar mensaje de interacción en pantalla
     void OnGUI()
     {

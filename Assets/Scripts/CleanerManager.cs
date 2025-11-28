@@ -103,6 +103,35 @@ public class CleanerManager : MonoBehaviour
         return limpiezaCompletada;
     }
 
+    // 🔄 NUEVO MÉTODO: Resetear tarea de limpieza
+    public void ResetTask()
+    {
+        Debug.Log("🔄 Reseteando tarea de limpieza...");
+
+        limpiezaCompletada = false;
+        cerca = false;
+        cuboActual = null;
+
+        // Resetear cada cubo
+        foreach (GameObject cubo in cubosLimpiables)
+        {
+            if (cubo != null)
+            {
+                cubo.SetActive(true);
+                interacciones[cubo] = 0;
+
+                // Resetear el comportamiento de limpieza
+                CleanerBehavior behavior = cubo.GetComponent<CleanerBehavior>();
+                if (behavior != null)
+                {
+                    behavior.ResetCleaner();
+                }
+            }
+        }
+
+        Debug.Log("✅ Tarea de limpieza reseteada");
+    }
+
     // GUI para mostrar mensaje en pantalla
     void OnGUI()
     {
